@@ -2,9 +2,9 @@ package uz.uzumtech.retail_service.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-import uz.uzumtech.core.constant.enums.ErrorType;
+import uz.uzumtech.retail_service.constant.enums.ErrorType;
 
-import static uz.uzumtech.core.constant.enums.Error.HTTP_SERVICE_ERROR_CODE;
+import static uz.uzumtech.retail_service.constant.enums.Error.HTTP_SERVICE_ERROR_CODE;
 
 public class HttpServerException extends ApplicationException {
 

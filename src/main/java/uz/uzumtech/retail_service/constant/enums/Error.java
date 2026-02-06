@@ -1,4 +1,4 @@
-package uz.uzumtech.retail_service.enums;
+package uz.uzumtech.retail_service.constant.enums;
 
 import lombok.Getter;
 

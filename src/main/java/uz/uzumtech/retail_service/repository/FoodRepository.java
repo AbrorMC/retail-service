@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import uz.uzumtech.retail_service.entity.Food;
 
 public interface FoodRepository extends JpaRepository<Food, Long> {
-    Page<Food> findAllByCategoryId(Long id, Pageable page);
+    Page<Food> findAllByCategoryId(Long id, Pageable pageable);
 }

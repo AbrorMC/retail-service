@@ -31,6 +31,6 @@ public class BaseEntity {
     LocalDateTime updatedAt;
 
     @Builder.Default
-    @Column(name = "is_active")
+    @Column(name = "is_active", nullable = false)
     boolean isActive = true;
 }

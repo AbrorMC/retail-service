@@ -1,7 +1,7 @@
 package uz.uzumtech.retail_service.dto;
 
 import lombok.Builder;
-import uz.uzumtech.core.constant.enums.ErrorType;
+import uz.uzumtech.retail_service.constant.enums.ErrorType;
 
 import java.util.List;
 

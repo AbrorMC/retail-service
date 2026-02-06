@@ -8,6 +8,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableJpaAuditing
 @EnableTransactionManagement
-@EnableJpaRepositories("uz.uzumtech.core.repository")
+@EnableJpaRepositories("uz.uzumtech.retail_service.repository")
 public class DataSourceConfiguration {
 }

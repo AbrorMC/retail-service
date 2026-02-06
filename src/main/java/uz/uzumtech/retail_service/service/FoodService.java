@@ -1,13 +1,11 @@
 package uz.uzumtech.retail_service.service;
 
-import org.springframework.data.domain.Pageable;
-import uz.uzumtech.retail_service.dto.response.FoodDetailsResponse;
+import org.springframework.data.domain.Page;
 import uz.uzumtech.retail_service.dto.response.FoodResponse;
-import uz.uzumtech.retail_service.dto.response.PageResponse;
 
 public interface FoodService {
 
-    PageResponse<FoodResponse> getByCategoryId(Long id, Pageable request);
-    FoodDetailsResponse get(Long id);
+    Page<FoodResponse> getByCategoryId(Long id, int pageNumber, int size);
+    //FoodDetailsResponse get(Long id);
 
 }

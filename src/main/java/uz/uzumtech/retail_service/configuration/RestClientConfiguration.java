@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
-import uz.uzumtech.core.handler.RestClientExceptionHandler;
+import uz.uzumtech.retail_service.handler.RestClientExceptionHandler;
 
 import java.time.Duration;
 

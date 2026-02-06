@@ -4,15 +4,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.uzumtech.retail_service.dto.response.CategoryResponse;
-import uz.uzumtech.retail_service.dto.response.PageResponse;
-import uz.uzumtech.retail_service.entity.Category;
 import uz.uzumtech.retail_service.mapper.CategoryMapper;
 import uz.uzumtech.retail_service.repository.CategoryRepository;
 import uz.uzumtech.retail_service.service.CategoryService;
+import uz.uzumtech.retail_service.utils.PaginationValidator;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +22,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public PageResponse<CategoryResponse> getAll(Pageable request) {
-        Page<Category> page = categoryRepository.findAll(request);
+    public Page<CategoryResponse> getAll(int pageNumber, int size) {
+        var pageable = PaginationValidator.validate(pageNumber, size);
 
-        return categoryMapper.toPageResponse(page);
+        return categoryRepository
+                .findAll(pageable)
+                .map(categoryMapper::toResponse);
     }
 
 }

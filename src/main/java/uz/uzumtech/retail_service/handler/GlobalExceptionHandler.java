@@ -17,11 +17,11 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import uz.uzumtech.core.dto.ErrorDto;
-import uz.uzumtech.core.exception.ApplicationException;
+import uz.uzumtech.retail_service.dto.ErrorDto;
+import uz.uzumtech.retail_service.exception.ApplicationException;
 
-import static uz.uzumtech.core.constant.enums.Error.*;
-import static uz.uzumtech.core.constant.enums.ErrorType.*;
+import static uz.uzumtech.retail_service.constant.enums.Error.*;
+import static uz.uzumtech.retail_service.constant.enums.ErrorType.*;
 
 @Slf4j
 @RestControllerAdvice

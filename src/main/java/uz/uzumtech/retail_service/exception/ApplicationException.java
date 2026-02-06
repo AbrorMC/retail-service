@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import uz.uzumtech.core.constant.enums.ErrorType;
+import uz.uzumtech.retail_service.constant.enums.ErrorType;
 
 @Getter
 @ToString

@@ -1,3 +1,56 @@
 spring:
   application:
     name: retail-service
+
+  data.web.pageable:
+    default-page-size: 10
+    one-indexed-parameters: true
+    max-page-size: 20
+
+  # JPA configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/retail
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    tomcat:
+      test-on-borrow: true
+      validation-query: SELECT 1
+
+  # Flyway configuration
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    validate-on-migrate: true
+    baseline-version: 0
+    schemas: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    show-sql: ${SHOW_SQL:false}
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 10
+        order_updates: true
+        order_inserts: true
+        format_sql: true
+        generate_statistics: true
+        default_schema: postgres
+
+# Tomcat configuration (milliseconds)
+server:
+  port: ${SERVER_PORT:8081}
+  tomcat:
+    accept-count: ${TOMCAT_ACCEPT_COUNT:100}
+    max-connections: ${TOMCAT_MAX_CONNECTIONS:1000}
+    threads:
+      max: ${TOMCAT_MAX_THREADS:200}
+      min-spare: ${TOMCAT_MIN_SPARE_THREADS:20}
+  compression:
+    enabled: true
+    min-response-size: 2KB
+    mime-types: application/json, application/xml, text/xml, text/plain

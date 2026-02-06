@@ -4,8 +4,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
-import uz.uzumtech.core.exception.HttpClientException;
-import uz.uzumtech.core.exception.HttpServerException;
+import uz.uzumtech.retail_service.exception.HttpClientException;
+import uz.uzumtech.retail_service.exception.HttpServerException;
 
 import java.io.IOException;
 import java.net.URI;
