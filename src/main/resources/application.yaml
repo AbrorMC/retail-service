@@ -10,8 +10,8 @@ spring:
   # JPA configuration
   datasource:
     url: jdbc:postgresql://localhost:5432/retail
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:123}
     driver-class-name: org.postgresql.Driver
     tomcat:
       test-on-borrow: true
