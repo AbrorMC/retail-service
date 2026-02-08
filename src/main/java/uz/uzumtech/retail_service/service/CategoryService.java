@@ -1,10 +1,10 @@
 package uz.uzumtech.retail_service.service;
 
-import org.springframework.data.domain.Page;
 import uz.uzumtech.retail_service.dto.response.CategoryResponse;
+import uz.uzumtech.retail_service.dto.response.PageResponse;
 
 public interface CategoryService {
 
-    Page<CategoryResponse> getAll(int page, int size);
+    PageResponse<CategoryResponse> getAll(int page, int size);
 
 }

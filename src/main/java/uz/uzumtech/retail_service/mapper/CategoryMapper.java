@@ -7,18 +7,8 @@ import uz.uzumtech.retail_service.dto.response.PageResponse;
 import uz.uzumtech.retail_service.entity.Category;
 
 @Mapper(componentModel = "spring")
-public interface CategoryMapper {
+public interface CategoryMapper extends BaseMapper<CategoryResponse, Category> {
 
     CategoryResponse toResponse(Category category);
-
-    default PageResponse<CategoryResponse> toPageResponse(Page<Category> page) {
-        return new PageResponse<>(
-                page.getContent().stream().map(this::toResponse).toList(),
-                page.getTotalElements(),
-                page.getTotalPages(),
-                page.getNumber() + 1,
-                page.isLast()
-        );
-    }
 
 }

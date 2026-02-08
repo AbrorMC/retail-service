@@ -9,6 +9,6 @@ public class PaginationValidator {
     public static final int MAX_PAGE_SIZE = 100;
 
     public static PageRequest validate(int page, int size) {
-        return PageRequest.of(page, Math.min(size, MAX_PAGE_SIZE));
+        return PageRequest.of(page - 1, Math.min(size, MAX_PAGE_SIZE));
     }
 }
