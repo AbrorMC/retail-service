@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.uzumtech.retail_service.dto.request.CartItemRequest;
 import uz.uzumtech.retail_service.dto.response.CartItemResponse;
+import uz.uzumtech.retail_service.dto.response.CartResponse;
 import uz.uzumtech.retail_service.service.CartService;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class CartController {
     }
 
     @GetMapping("/{id}")
-    ResponseEntity<List<CartItemResponse>> getAll(@PathVariable Long id) {
+    ResponseEntity<CartResponse> getAll(@PathVariable Long id) {
         return ResponseEntity.ok(cartService.getItemsOfCart(id));
     }
 }

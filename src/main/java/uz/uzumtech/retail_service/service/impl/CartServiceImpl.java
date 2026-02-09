@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.uzumtech.retail_service.dto.request.CartItemRequest;
 import uz.uzumtech.retail_service.dto.response.CartItemResponse;
+import uz.uzumtech.retail_service.dto.response.CartResponse;
 import uz.uzumtech.retail_service.dto.response.PageResponse;
 import uz.uzumtech.retail_service.entity.CartItem;
 import uz.uzumtech.retail_service.entity.Food;
@@ -14,6 +15,7 @@ import uz.uzumtech.retail_service.exception.CartNotFoundException;
 import uz.uzumtech.retail_service.exception.FoodNotFoundException;
 import uz.uzumtech.retail_service.exception.PriceNotFoundException;
 import uz.uzumtech.retail_service.mapper.CartItemMapper;
+import uz.uzumtech.retail_service.mapper.CartMapper;
 import uz.uzumtech.retail_service.repository.CartItemRepository;
 import uz.uzumtech.retail_service.repository.CartRepository;
 import uz.uzumtech.retail_service.repository.FoodRepository;
@@ -30,6 +32,7 @@ import java.util.List;
 public class CartServiceImpl implements CartService {
 
     CartItemMapper cartItemMapper;
+    CartMapper cartMapper;
     CartRepository cartRepository;
     CartItemRepository cartItemRepository;
     FoodRepository foodRepository;
@@ -59,15 +62,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartItemResponse> getItemsOfCart(Long cartId) {
+    public CartResponse getItemsOfCart(Long cartId) {
         var cart = cartRepository
                 .findByIdWithItems(cartId)
                 .orElseThrow(() -> new CartNotFoundException(cartId.toString()));
 
-        List<CartItem> items = cart.getItems();
-
-        return items.stream()
-                .map(cartItemMapper::toResponse)
-                .toList();
+        return cartMapper.toResponse(cart);
     }
 }

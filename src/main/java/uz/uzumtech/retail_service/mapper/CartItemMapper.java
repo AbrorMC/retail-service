@@ -20,4 +20,5 @@ public interface CartItemMapper extends BaseMapper<CartItemResponse, CartItem> {
     @Mapping(target = "price", source = "price")
     @Mapping(target = "total", expression = "java(price.multiply(BigDecimal.valueOf(count)))")
     CartItemResponse toResponse(CartItem cartItem);
+
 }
