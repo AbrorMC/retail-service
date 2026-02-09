@@ -4,13 +4,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.uzumtech.retail_service.dto.request.CartItemRequest;
 import uz.uzumtech.retail_service.dto.response.CartItemResponse;
 import uz.uzumtech.retail_service.service.CartService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/core/cart")
@@ -23,5 +22,10 @@ public class CartController {
     @PostMapping
     ResponseEntity<CartItemResponse> add(@RequestBody CartItemRequest request) {
         return ResponseEntity.ok(cartService.addItem(request));
+    }
+
+    @GetMapping("/{id}")
+    ResponseEntity<List<CartItemResponse>> getAll(@PathVariable Long id) {
+        return ResponseEntity.ok(cartService.getItemsOfCart(id));
     }
 }
