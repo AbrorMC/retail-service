@@ -5,12 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import uz.uzumtech.retail_service.dto.request.CartItemRequest;
-import uz.uzumtech.retail_service.dto.response.CartItemResponse;
+import uz.uzumtech.retail_service.dto.request.OrderItemRequest;
+import uz.uzumtech.retail_service.dto.response.OrderItemResponse;
 import uz.uzumtech.retail_service.dto.response.CartResponse;
 import uz.uzumtech.retail_service.service.CartService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/core/cart")
@@ -21,7 +19,7 @@ public class CartController {
     CartService cartService;
 
     @PostMapping
-    ResponseEntity<CartItemResponse> add(@RequestBody CartItemRequest request) {
+    ResponseEntity<OrderItemResponse> add(@RequestBody OrderItemRequest request) {
         return ResponseEntity.ok(cartService.addItem(request));
     }
 

@@ -35,9 +35,9 @@ public class Cart extends BaseEntity {
 
     @Builder.Default
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<CartItem> items = new ArrayList<>();
+    List<OrderItem> items = new ArrayList<>();
 
-    public void addItem(CartItem item) {
+    public void addItem(OrderItem item) {
         items.add(item);
 
         if (this.itemCount == null) this.itemCount = 0;
@@ -51,7 +51,7 @@ public class Cart extends BaseEntity {
         item.setCart(this);
     }
 
-    public void removeItem(CartItem item) {
+    public void removeItem(OrderItem item) {
         if (items.remove(item)) {
             this.itemCount--;
 
@@ -66,7 +66,7 @@ public class Cart extends BaseEntity {
     }
 
     public void removeAllItems() {
-        for (CartItem item : items) {
+        for (OrderItem item : items) {
             item.setCart(null);
         }
         items.clear();

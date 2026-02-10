@@ -2,7 +2,7 @@ package uz.uzumtech.retail_service.dto.response;
 
 import java.math.BigDecimal;
 
-public record CartItemResponse(
+public record OrderItemResponse(
         Long id,
         String food,
         Integer count,

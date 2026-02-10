@@ -6,5 +6,5 @@ import java.util.List;
 public record CartResponse(
         Integer itemCount,
         BigDecimal totalAmount,
-        List<CartItemResponse> items
+        List<OrderItemResponse> items
 ) {}
