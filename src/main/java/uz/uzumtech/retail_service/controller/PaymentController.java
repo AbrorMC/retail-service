@@ -9,22 +9,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uz.uzumtech.retail_service.dto.request.OrderRequest;
-import uz.uzumtech.retail_service.dto.response.OrderResponse;
-import uz.uzumtech.retail_service.service.OrderService;
+import uz.uzumtech.retail_service.dto.request.PaymentRequest;
+import uz.uzumtech.retail_service.dto.response.PaymentResponse;
+import uz.uzumtech.retail_service.service.PaymentService;
 
 @RestController
-@RequestMapping("api/core/orders")
+@RequestMapping("api/core/payments")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class OrderController {
+public class PaymentController {
 
-    OrderService orderService;
+    PaymentService paymentService;
 
     @PostMapping
-    public ResponseEntity<OrderResponse> create(@RequestBody OrderRequest request) {
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(orderService.createOrder(request));
+    public ResponseEntity<PaymentResponse> createPayment(@RequestBody PaymentRequest paymentRequest) {
+        PaymentResponse paymentResponse = paymentService.createPayment(paymentRequest);
+        return new ResponseEntity<>(paymentResponse, HttpStatus.CREATED);
     }
 }
