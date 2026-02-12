@@ -10,6 +10,6 @@ public interface OrderService {
     OrderResponse createOrder(OrderRequest request);
 
     PageResponse<OrderResponse> getAllOrders(int page, int size);
-    void updateStatus(PaymentWebhookDto webhookData);
+    void updateStatusOnPaymentSuccess(PaymentWebhookDto webhookData);
 
 }

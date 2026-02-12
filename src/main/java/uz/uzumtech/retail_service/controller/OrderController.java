@@ -36,9 +36,9 @@ public class OrderController {
     }
 
     @PostMapping("/webhook")
-    public ResponseEntity<Void> updateStatus(@RequestBody PaymentWebhookDto webhookData) {
+    public ResponseEntity<Void> updateStatusOnPaymentSuccess(@RequestBody PaymentWebhookDto webhookData) {
         log.info("Received webhook from Transactions Service: {}", webhookData);
-        orderService.updateStatus(webhookData);
+        orderService.updateStatusOnPaymentSuccess(webhookData);
         return ResponseEntity.ok().build();
     }
 }

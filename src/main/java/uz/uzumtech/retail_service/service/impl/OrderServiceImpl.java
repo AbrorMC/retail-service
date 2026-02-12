@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public void updateStatus(PaymentWebhookDto webhookData) {
+    public void updateStatusOnPaymentSuccess(PaymentWebhookDto webhookData) {
         var order = orderRepository
                 .findById(webhookData.referenceId())
                 .orElseThrow(() -> new OrderNotFoundException(webhookData.referenceId().toString()));
