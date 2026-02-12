@@ -25,7 +25,7 @@ public class TransactionServiceAdapter {
 
          var result = restClient
                  .post()
-                 .uri("http://localhost:8082/api/notification/sending")
+                 .uri("http://localhost:8082/api/v1/transactions")
                  .contentType(MediaType.APPLICATION_JSON)
                  .body(request)
                  .retrieve()

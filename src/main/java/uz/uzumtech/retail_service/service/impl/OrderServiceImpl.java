@@ -6,14 +6,19 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.uzumtech.retail_service.constant.enums.OrderStatus;
+import uz.uzumtech.retail_service.constant.enums.PaymentStatus;
+import uz.uzumtech.retail_service.dto.PaymentWebhookDto;
 import uz.uzumtech.retail_service.dto.request.OrderRequest;
 import uz.uzumtech.retail_service.dto.response.OrderResponse;
+import uz.uzumtech.retail_service.dto.response.PageResponse;
 import uz.uzumtech.retail_service.entity.OrderItem;
 import uz.uzumtech.retail_service.exception.CartNotFoundException;
+import uz.uzumtech.retail_service.exception.OrderNotFoundException;
 import uz.uzumtech.retail_service.mapper.OrderMapper;
 import uz.uzumtech.retail_service.repository.CartRepository;
 import uz.uzumtech.retail_service.repository.OrderRepository;
 import uz.uzumtech.retail_service.service.OrderService;
+import uz.uzumtech.retail_service.utils.PaginationValidator;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -47,5 +52,26 @@ public class OrderServiceImpl implements OrderService {
         cart.setTotalAmount(BigDecimal.ZERO);
 
         return orderMapper.toResponse(orderRepository.save(order));
+    }
+
+    @Override
+    public PageResponse<OrderResponse> getAllOrders(int page, int size) {
+        var pageable = PaginationValidator.validate(page, size);
+
+        var orderPage = orderRepository.findAll(pageable);
+
+        return orderMapper.toPageResponse(orderPage);
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(PaymentWebhookDto webhookData) {
+        var order = orderRepository
+                .findById(webhookData.referenceId())
+                .orElseThrow(() -> new OrderNotFoundException(webhookData.referenceId().toString()));
+
+        if (webhookData.status() == PaymentStatus.COMPLETED) {
+            order.setStatus(OrderStatus.PAID);
+        }
     }
 }

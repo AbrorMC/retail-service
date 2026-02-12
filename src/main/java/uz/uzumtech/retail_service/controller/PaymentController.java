@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uz.uzumtech.retail_service.dto.PaymentWebhookDto;
 import uz.uzumtech.retail_service.dto.request.PaymentRequest;
 import uz.uzumtech.retail_service.dto.response.PaymentResponse;
 import uz.uzumtech.retail_service.service.PaymentService;
@@ -27,11 +28,5 @@ public class PaymentController {
     public ResponseEntity<PaymentResponse> createPayment(@RequestBody PaymentRequest paymentRequest) {
         PaymentResponse paymentResponse = paymentService.createPayment(paymentRequest);
         return new ResponseEntity<>(paymentResponse, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/webhook")
-    public ResponseEntity<Void> handleWebhook(@RequestBody Object webhookData) {
-        log.info("Received webhook from Transactions Service: {}", webhookData);
-        return ResponseEntity.ok().build();
     }
 }
