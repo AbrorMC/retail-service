@@ -31,4 +31,21 @@ public class Food extends BaseEntity {
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<ReceiptItem> receipt = new ArrayList<>();
+
+    public void addReceiptItem(ReceiptItem receiptItem) {
+        receipt.add(receiptItem);
+        receiptItem.setFood(this);
+    }
+
+    public void addAllReceiptItems(List<ReceiptItem> receiptItems) {
+        receiptItems.forEach(this::addReceiptItem);
+    }
+
+    public void removeReceiptItem(ReceiptItem receiptItem) {
+        receipt.remove(receiptItem);
+        receiptItem.setFood(null);
+    }
 }
