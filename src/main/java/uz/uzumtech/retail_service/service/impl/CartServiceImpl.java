@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.uzumtech.retail_service.dto.request.OrderItemRequest;
 import uz.uzumtech.retail_service.dto.response.OrderItemResponse;
 import uz.uzumtech.retail_service.dto.response.CartResponse;
+import uz.uzumtech.retail_service.entity.OrderItem;
 import uz.uzumtech.retail_service.exception.CartNotFoundException;
 import uz.uzumtech.retail_service.exception.FoodNotFoundException;
 import uz.uzumtech.retail_service.exception.PriceNotFoundException;
@@ -32,15 +33,20 @@ public class CartServiceImpl implements CartService {
     PriceRepository priceRepository;
 
     @Override
-    @Transactional
     public OrderItemResponse addItem(OrderItemRequest request) {
-        var cart = cartRepository
-                .findById(request.cartId())
-                .orElseThrow(() -> new CartNotFoundException(request.cartId().toString()));
+        boolean available = foodRepository.isFoodAvailable(request.foodId());
+
+        if (!available) {
+            throw new IllegalStateException("Не доступно для выбора блюда с id: " + request.foodId());
+        }
 
         var food = foodRepository
                 .findById(request.foodId())
                 .orElseThrow(() -> new FoodNotFoundException(request.foodId().toString()));
+
+        var cart = cartRepository
+                .findById(request.cartId())
+                .orElseThrow(() -> new CartNotFoundException(request.cartId().toString()));
 
         var price = priceRepository
                 .findByFoodIdAndIsActiveTrue(request.foodId())
@@ -51,7 +57,12 @@ public class CartServiceImpl implements CartService {
         cartItem.setPrice(price.getPrice());
         cart.addItem(cartItem);
 
-        return orderItemMapper.toResponse(orderItemRepository.save(cartItem));
+        return orderItemMapper.toResponse(save(cartItem));
+    }
+
+    @Transactional
+    public OrderItem save(OrderItem item) {
+        return orderItemRepository.save(item);
     }
 
     @Override
