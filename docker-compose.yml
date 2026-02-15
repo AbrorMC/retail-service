@@ -46,6 +46,27 @@ services:
       - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT
       - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      interval: 10s
+      retries: 5
+
+  kafka-init:
+    image: apache/kafka:latest
+    container_name: kafka_init
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: [ "/bin/sh", "-c" ]
+    command: |
+      "
+      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic payment_events --partitions 16 --replication-factor 1 && \
+      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic inventory_results --partitions 16 --replication-factor 1 && \
+      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic payment_commands --partitions 8 --replication-factor 1 && \
+      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic inventory_commands --partitions 8 --replication-factor 1
+      "
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -57,7 +78,9 @@ services:
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
       - DYNAMIC_CONFIG_ENABLED=true
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
 
 volumes:
   pgdata:
+  kafka_data:

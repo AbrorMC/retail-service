@@ -1,4 +1,4 @@
-package uz.uzumtech.retail_service.adapter;
+package uz.uzumtech.retail_service.component.adapter;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

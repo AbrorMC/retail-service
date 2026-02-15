@@ -1,8 +1,5 @@
 -- Устанавливаем схему, чтобы не писать префиксы везде
-SET search_path TO postgres;
-
--- 1. Чистим таблицы (на случай повторного запуска)
-TRUNCATE TABLE foods, categories RESTART IDENTITY CASCADE;
+--SET search_path TO postgres;
 
 -- 2. Вставляем категории
 INSERT INTO categories (name, description, is_active) VALUES

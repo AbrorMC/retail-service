@@ -52,3 +52,20 @@ server:
     enabled: true
     min-response-size: 2KB
     mime-types: application/json, application/xml, text/xml, text/plain
+
+# Kafka
+kafka:
+  bootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+  groupId: ${KAFKA_CARD_GROUP_ID:test_group}
+
+  clientId: ${KAFKA_CARD_CLIENT_ID:test_client}
+  acksConfig: ${KAFKA_ACKS_CONFIG:all}
+  retriesConfig: ${KAFKA_RETRIES_CONFIG:3}
+  lingerMsConfig: ${KAFKA_LINGER_MS_CONFIG:100}
+  clientDnsLookup: ${KAFKA_CLIENT_DNS_LOOKUP:use_all_dns_ips}
+  batchSizeConfig: ${KAFKA_BATCH_SIZE_CONFIG:16384}
+  bufferMemoryConfig: ${KAFKA_BUFFER_MEMORY_CONFIG:32768}
+  autoOffsetResetConfig: ${KAFKA_AUTO_OFFSET_RESET_CONFIG:latest}
+
+  topic:
+    order-topic: ${KAFKA_ORDER_TOPIC:ORDER_TOPIC}

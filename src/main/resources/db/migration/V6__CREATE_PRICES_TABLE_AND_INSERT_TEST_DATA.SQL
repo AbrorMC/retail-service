@@ -15,9 +15,9 @@ CREATE TABLE prices (
 
 CREATE INDEX idx_prices_food_id ON prices(food_id);
 
-SET search_path TO postgres;
-
-TRUNCATE TABLE prices RESTART IDENTITY CASCADE;
+--SET search_path TO postgres;
+--
+--TRUNCATE TABLE prices RESTART IDENTITY CASCADE;
 
 INSERT INTO prices (food_id, price, is_active, created_at, updated_at) VALUES
 (1, 15000.00, true, NOW(), NOW()), -- Кофе Американо

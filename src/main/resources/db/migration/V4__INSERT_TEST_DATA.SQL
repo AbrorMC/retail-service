@@ -1,6 +1,6 @@
-SET search_path TO postgres;
-
-TRUNCATE TABLE carts, cart_items RESTART IDENTITY CASCADE;
+--SET search_path TO postgres;
+--
+--TRUNCATE TABLE carts, cart_items RESTART IDENTITY CASCADE;
 
 INSERT INTO carts (user_id, created_at, updated_at) VALUES
 (101, NOW() - INTERVAL '2 days', NOW() - INTERVAL '2 days'), -- Корзина пользователя 101 (старая)

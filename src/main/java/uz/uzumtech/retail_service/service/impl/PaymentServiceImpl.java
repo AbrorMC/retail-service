@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import uz.uzumtech.retail_service.adapter.TransactionServiceAdapter;
+import uz.uzumtech.retail_service.component.adapter.TransactionServiceAdapter;
 import uz.uzumtech.retail_service.dto.request.PaymentRequest;
 import uz.uzumtech.retail_service.dto.response.PaymentResponse;
 import uz.uzumtech.retail_service.service.PaymentService;
