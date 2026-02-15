@@ -10,17 +10,18 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import uz.uzumtech.retail_service.dto.OrderDto;
+import uz.uzumtech.retail_service.dto.event.PaymentEventDto;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class OrderConsumer {
+public class PaymentEventConsumer {
 
-    @KafkaListener(topics = "${kafka.topic.order-topic}", containerFactory = "orderFactory")
-    public void orderListener(@Payload OrderDto payload, Acknowledgment acknowledgment) {
+    @KafkaListener(topics = "${kafka.topic.payment-events-topic}", containerFactory = "paymentEventFactory")
+    public void orderListener(@Payload PaymentEventDto payload, Acknowledgment acknowledgment) {
         acknowledgment.acknowledge();
 
-        log.info("orderListener consumer {}", payload);
+        log.info("paymentEventListener consumer {}", payload);
     }
 }

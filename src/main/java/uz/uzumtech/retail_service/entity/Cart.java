@@ -2,6 +2,7 @@ package uz.uzumtech.retail_service.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
@@ -27,10 +28,11 @@ public class Cart extends BaseEntity {
     @Column(nullable = false)
     Long userId;
 
+    @PositiveOrZero
     @Column(precision = 19, scale = 2)
     BigDecimal totalAmount;
 
-    @Positive
+    @PositiveOrZero
     Integer itemCount;
 
     @Builder.Default

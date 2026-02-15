@@ -68,4 +68,4 @@ kafka:
   autoOffsetResetConfig: ${KAFKA_AUTO_OFFSET_RESET_CONFIG:latest}
 
   topic:
-    order-topic: ${KAFKA_ORDER_TOPIC:ORDER_TOPIC}
+    payment-events-topic: ${KAFKA_PAYMENT_EVENTS_TOPIC:payment_events}

@@ -62,16 +62,4 @@ public class OrderServiceImpl implements OrderService {
 
         return orderMapper.toPageResponse(orderPage);
     }
-
-    @Override
-    @Transactional
-    public void updateStatusOnPaymentSuccess(PaymentWebhookDto webhookData) {
-        var order = orderRepository
-                .findById(webhookData.referenceId())
-                .orElseThrow(() -> new OrderNotFoundException(webhookData.referenceId().toString()));
-
-        if (webhookData.status() == PaymentStatus.COMPLETED) {
-            order.setStatus(OrderStatus.PAID);
-        }
-    }
 }

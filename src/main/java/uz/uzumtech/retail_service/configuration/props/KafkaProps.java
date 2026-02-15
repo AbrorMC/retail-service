@@ -30,7 +30,7 @@ public class KafkaProps {
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class Topic {
 
-        String orderTopic;
+        String paymentEventsTopic;
     }
 
 }

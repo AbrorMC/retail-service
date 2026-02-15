@@ -33,6 +33,7 @@ public class CartServiceImpl implements CartService {
     PriceRepository priceRepository;
 
     @Override
+    @Transactional
     public OrderItemResponse addItem(OrderItemRequest request) {
         boolean available = foodRepository.isFoodAvailable(request.foodId());
 
@@ -57,12 +58,7 @@ public class CartServiceImpl implements CartService {
         cartItem.setPrice(price.getPrice());
         cart.addItem(cartItem);
 
-        return orderItemMapper.toResponse(save(cartItem));
-    }
-
-    @Transactional
-    public OrderItem save(OrderItem item) {
-        return orderItemRepository.save(item);
+        return orderItemMapper.toResponse(orderItemRepository.save(cartItem));
     }
 
     @Override

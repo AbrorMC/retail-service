@@ -9,31 +9,31 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import uz.uzumtech.retail_service.configuration.props.KafkaProps;
-import uz.uzumtech.retail_service.dto.OrderDto;
+import uz.uzumtech.retail_service.dto.event.PaymentEventDto;
 
 @Slf4j
 @Component
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
-public class OrderProducer {
+public class PaymentEventProducer {
 
     KafkaProps kafkaProps;
-    KafkaTemplate<String, OrderDto> orderTemplate;
+    KafkaTemplate<String, PaymentEventDto> paymentEventsTemplate;
 
-    public OrderProducer(KafkaProps kafkaProps,
-                         @Qualifier("orderTopic")
-                         KafkaTemplate<String, OrderDto> orderTemplate) {
+    public PaymentEventProducer(KafkaProps kafkaProps,
+                                @Qualifier("paymentEventsTopic")
+                         KafkaTemplate<String, PaymentEventDto> paymentEventsTemplate) {
         this.kafkaProps = kafkaProps;
-        this.orderTemplate = orderTemplate;
+        this.paymentEventsTemplate = paymentEventsTemplate;
     }
 
 
-    public void sendMessage(final OrderDto payload) {
-        final Message<OrderDto> message = MessageBuilder
+    public void sendMessage(final PaymentEventDto payload) {
+        final Message<PaymentEventDto> message = MessageBuilder
                 .withPayload(payload)
-                .setHeader(KafkaHeaders.TOPIC, kafkaProps.getTopic().getOrderTopic())
+                .setHeader(KafkaHeaders.TOPIC, kafkaProps.getTopic().getPaymentEventsTopic())
                 .setHeader(KafkaHeaders.KEY, payload.key())
                 .setHeader(KafkaHeaders.CORRELATION_ID, payload.correlationId())
                 .build();
-        orderTemplate.send(message);
+        paymentEventsTemplate.send(message);
     }
 }
