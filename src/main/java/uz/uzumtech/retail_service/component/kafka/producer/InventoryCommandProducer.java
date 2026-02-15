@@ -14,26 +14,26 @@ import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 @Slf4j
 @Component
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
-public class PaymentEventProducer {
+public class InventoryCommandProducer {
 
     KafkaProps kafkaProps;
-    KafkaTemplate<String, KafkaMessageDto> paymentEventsTemplate;
+    KafkaTemplate<String, KafkaMessageDto> inventoryCommandsTemplate;
 
-    public PaymentEventProducer(KafkaProps kafkaProps,
-                                @Qualifier("paymentEventsTopic")
-                         KafkaTemplate<String, KafkaMessageDto> paymentEventsTemplate) {
+    public InventoryCommandProducer(KafkaProps kafkaProps,
+                                    @Qualifier("inventoryCommandsTopic")
+                         KafkaTemplate<String, KafkaMessageDto> inventoryCommandsTemplate) {
         this.kafkaProps = kafkaProps;
-        this.paymentEventsTemplate = paymentEventsTemplate;
+        this.inventoryCommandsTemplate = inventoryCommandsTemplate;
     }
 
 
     public void sendMessage(final KafkaMessageDto payload) {
         final Message<KafkaMessageDto> message = MessageBuilder
                 .withPayload(payload)
-                .setHeader(KafkaHeaders.TOPIC, kafkaProps.getTopic().getPaymentEventsTopic())
+                .setHeader(KafkaHeaders.TOPIC, kafkaProps.getTopic().getInventoryCommandsTopic())
                 .setHeader(KafkaHeaders.KEY, payload.key())
                 .setHeader(KafkaHeaders.CORRELATION_ID, payload.correlationId())
                 .build();
-        paymentEventsTemplate.send(message);
+        inventoryCommandsTemplate.send(message);
     }
 }

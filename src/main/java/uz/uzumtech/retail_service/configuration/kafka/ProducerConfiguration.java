@@ -11,7 +11,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 import uz.uzumtech.retail_service.configuration.props.KafkaProps;
 import uz.uzumtech.retail_service.dto.DlqDto;
-import uz.uzumtech.retail_service.dto.event.PaymentEventDto;
+import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,7 +50,12 @@ public class ProducerConfiguration {
     }
 
     @Bean("paymentEventsTopic")
-    public KafkaTemplate<String, PaymentEventDto> paymentEventsTemplate() {
+    public KafkaTemplate<String, KafkaMessageDto> paymentEventsTemplate() {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(objectDeserializerConfigs()));
+    }
+
+    @Bean("inventoryCommandsTopic")
+    public KafkaTemplate<String, KafkaMessageDto> inventoryCommandsTemplate() {
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(objectDeserializerConfigs()));
     }
 }

@@ -10,40 +10,31 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import uz.uzumtech.retail_service.component.kafka.producer.InventoryCommandProducer;
+import uz.uzumtech.retail_service.component.kafka.producer.InventoryEventProducer;
 import uz.uzumtech.retail_service.constant.enums.EventStatus;
 import uz.uzumtech.retail_service.constant.enums.OrderStatus;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
+import uz.uzumtech.retail_service.repository.OrderItemRepository;
 import uz.uzumtech.retail_service.repository.OrderRepository;
+import uz.uzumtech.retail_service.service.InventoryService;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PaymentEventConsumer {
+public class InventoryCommandConsumer {
 
-    OrderRepository orderRepository;
-    InventoryCommandProducer inventoryCommandProducer;
+    InventoryService inventoryService;
+    InventoryEventProducer inventoryEventProducer;
 
-    @KafkaListener(topics = "${kafka.topic.payment-events-topic}", containerFactory = "paymentEventFactory")
+    @KafkaListener(topics = "${kafka.topic.inventory-commands-topic}", containerFactory = "inventoryCommandFactory")
     public void paymentEventListener(@Payload KafkaMessageDto payload, Acknowledgment acknowledgment) {
         acknowledgment.acknowledge();
 
-        if (payload.message().equals(EventStatus.PAYMENT_FAILED.toString())) return;
+        var eventStatus = inventoryService.reserveItems(Long.parseLong(payload.correlationId())) ?
+                EventStatus.RESERVE_INVENTORY : EventStatus.OUT_OF_STOCK;
 
-        orderRepository.findById(Long.parseLong(payload.correlationId()))
-                .ifPresent(order -> {
-                    order.setStatus(OrderStatus.PAID);
-                    orderRepository.save(order);
-                });
 
-        inventoryCommandProducer.sendMessage(
-                new KafkaMessageDto(
-                    payload.key(),
-                    payload.correlationId(),
-                    "RESERVE_ITEMS"
-                )
-        );
-
-        log.info("paymentEventListener consumer {}", payload);
+//        log.info("paymentEventListener consumer {}", payload);
     }
 }

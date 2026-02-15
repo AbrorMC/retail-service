@@ -1,6 +1,6 @@
-package uz.uzumtech.retail_service.dto.event;
+package uz.uzumtech.retail_service.dto;
 
-public record PaymentEventDto(
+public record KafkaMessageDto(
         String key,
         String correlationId,
         String message

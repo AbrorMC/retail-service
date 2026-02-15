@@ -31,6 +31,8 @@ public class KafkaProps {
     public static class Topic {
 
         String paymentEventsTopic;
+        String inventoryCommandsTopic;
+        String inventoryEventsTopic;
     }
 
 }

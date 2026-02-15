@@ -8,8 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.uzumtech.retail_service.component.kafka.producer.PaymentEventProducer;
+import uz.uzumtech.retail_service.constant.enums.EventStatus;
 import uz.uzumtech.retail_service.dto.PaymentWebhookDto;
-import uz.uzumtech.retail_service.dto.event.PaymentEventDto;
+import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 import uz.uzumtech.retail_service.dto.request.OrderRequest;
 import uz.uzumtech.retail_service.dto.response.OrderResponse;
 import uz.uzumtech.retail_service.dto.response.PageResponse;
@@ -42,10 +43,14 @@ public class OrderController {
     public ResponseEntity<Void> updateStatusOnPaymentSuccess(@RequestBody PaymentWebhookDto webhookData) {
         log.info("Received webhook from Transactions Service: {}", webhookData);
 
-        PaymentEventDto event = new PaymentEventDto(
+        String status = webhookData.status().toString().equals("COMPLETED") ?
+                EventStatus.PAYMENT_SUCCESS.toString() :
+                EventStatus.PAYMENT_FAILED.toString();
+
+        KafkaMessageDto event = new KafkaMessageDto(
                 webhookData.id().toString(),
                 webhookData.referenceId().toString(),
-                "Payment with amount " + webhookData.amount() + " is " + webhookData.status()
+                status
         );
 
         paymentEventProducer.sendMessage(event);
