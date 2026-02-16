@@ -30,6 +30,7 @@ public class PaymentEventConsumer {
 
         if (payload.message().equals(EventStatus.PAYMENT_FAILED.toString())) return;
 
+        //TODO: move to updateStatus() method of orderService
         orderRepository.findById(Long.parseLong(payload.correlationId()))
                 .ifPresent(order -> {
                     order.setStatus(OrderStatus.PAID);
