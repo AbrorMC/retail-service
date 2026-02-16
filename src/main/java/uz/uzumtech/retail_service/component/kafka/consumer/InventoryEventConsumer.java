@@ -25,9 +25,9 @@ public class InventoryEventConsumer {
         acknowledgment.acknowledge();
 
         if (payload.message().equals(EventStatus.INVENTORY_RESERVED.toString())) {
-
+            //TODO: orderService.updateStatus(EventStatus.SUCCESS)
         } else {
-
+            //TODO: orderService.refund()
         }
     }
 }
