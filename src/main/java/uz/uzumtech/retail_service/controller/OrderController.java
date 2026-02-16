@@ -16,6 +16,8 @@ import uz.uzumtech.retail_service.dto.response.OrderResponse;
 import uz.uzumtech.retail_service.dto.response.PageResponse;
 import uz.uzumtech.retail_service.service.OrderService;
 
+import java.util.UUID;
+
 @Slf4j
 @RestController
 @RequestMapping("api/core/orders")
@@ -48,8 +50,8 @@ public class OrderController {
                 EventStatus.PAYMENT_FAILED.toString();
 
         KafkaMessageDto event = new KafkaMessageDto(
-                webhookData.id().toString(),
                 webhookData.referenceId().toString(),
+                UUID.randomUUID().toString(),
                 status
         );
 

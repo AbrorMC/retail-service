@@ -9,13 +9,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
-import uz.uzumtech.retail_service.component.kafka.producer.InventoryCommandProducer;
 import uz.uzumtech.retail_service.component.kafka.producer.InventoryEventProducer;
 import uz.uzumtech.retail_service.constant.enums.EventStatus;
-import uz.uzumtech.retail_service.constant.enums.OrderStatus;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
-import uz.uzumtech.retail_service.repository.OrderItemRepository;
-import uz.uzumtech.retail_service.repository.OrderRepository;
 import uz.uzumtech.retail_service.service.InventoryService;
 
 @Slf4j
@@ -28,13 +24,19 @@ public class InventoryCommandConsumer {
     InventoryEventProducer inventoryEventProducer;
 
     @KafkaListener(topics = "${kafka.topic.inventory-commands-topic}", containerFactory = "inventoryCommandFactory")
-    public void paymentEventListener(@Payload KafkaMessageDto payload, Acknowledgment acknowledgment) {
+    public void inventoryCommandListener(@Payload KafkaMessageDto payload, Acknowledgment acknowledgment) {
         acknowledgment.acknowledge();
 
-        var eventStatus = inventoryService.reserveItems(Long.parseLong(payload.correlationId())) ?
-                EventStatus.RESERVE_INVENTORY : EventStatus.OUT_OF_STOCK;
+        EventStatus status = inventoryService.consumeIngredients(Long.parseLong(payload.key()));
 
+        inventoryEventProducer.sendMessage(
+                new KafkaMessageDto(
+                        payload.key(),
+                        payload.correlationId(),
+                        status == EventStatus.INVENTORY_RESERVED ? status.toString() : EventStatus.OUT_OF_STOCK.toString()
+                )
+        );
 
-//        log.info("paymentEventListener consumer {}", payload);
+        log.info("inventoryCommandListener consumer {}", payload);
     }
 }

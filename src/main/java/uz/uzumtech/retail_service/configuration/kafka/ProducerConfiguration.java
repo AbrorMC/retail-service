@@ -58,4 +58,9 @@ public class ProducerConfiguration {
     public KafkaTemplate<String, KafkaMessageDto> inventoryCommandsTemplate() {
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(objectDeserializerConfigs()));
     }
+
+    @Bean("inventoryEventsTopic")
+    public KafkaTemplate<String, KafkaMessageDto> inventoryEventsTemplate() {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(objectDeserializerConfigs()));
+    }
 }

@@ -3,17 +3,12 @@ package uz.uzumtech.retail_service.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import uz.uzumtech.retail_service.entity.Ingredient;
-import uz.uzumtech.retail_service.entity.Inventory;
-import uz.uzumtech.retail_service.entity.OrderItem;
+import org.springframework.transaction.annotation.Transactional;
+import uz.uzumtech.retail_service.constant.enums.EventStatus;
+import uz.uzumtech.retail_service.exception.InsufficientStockException;
 import uz.uzumtech.retail_service.repository.InventoryRepository;
 import uz.uzumtech.retail_service.repository.OrderItemRepository;
 import uz.uzumtech.retail_service.service.InventoryService;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,30 +19,16 @@ public class InventoryServiceImpl implements InventoryService {
     OrderItemRepository orderItemRepository;
 
     @Override
-    public boolean reserveItems(Long orderId) {
-        List<OrderItem> orderItems = orderItemRepository
-                .findByOrderId(orderId)
-                .orElseThrow();
+    @Transactional
+    public EventStatus consumeIngredients(Long orderId) {
 
-        List<Inventory> inventoryItems = new ArrayList<>();
+        long expectedCount = orderItemRepository.countUniqueIngredientsByOrderId(orderId);
+        int updatedRows = inventoryRepository.writeOffInventory(orderId);
 
-        orderItems.forEach(orderItem -> {
-
-                    var orderQuantity = BigDecimal.valueOf(orderItem.getCount());
-
-                    orderItem.getFood().getReceipt().forEach(ingredient -> {
-                        var inventory = inventoryRepository
-                                .findByIngredientId(ingredient.getId())
-                                .orElseThrow(() -> new RuntimeException("Ingredient not found in inventory: " + ingredient.getId()));
-
-                        var totalRequired = ingredient.getQuantity().multiply(orderQuantity);
-
-                        inventory.setQuantity(inventory.getQuantity().subtract(totalRequired));
-
-                        inventoryItems.add(inventory);
-                    });
-                });
-
-        return true;
+        if (updatedRows == (int) expectedCount) {
+            return EventStatus.INVENTORY_RESERVED;
+        } else {
+            throw new InsufficientStockException("Insufficient stock for " + orderId);
+        }
     }
 }
