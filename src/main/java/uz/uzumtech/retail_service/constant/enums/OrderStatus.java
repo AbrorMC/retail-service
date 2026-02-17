@@ -3,10 +3,10 @@ package uz.uzumtech.retail_service.constant.enums;
 public enum OrderStatus {
     CREATED,
 //    PENDING,
-    PAID
+    PAID,
 //    CONFIRM,
 //    REJECTED,
 //    CANCELED,
 //    DELIVERING,
-//    DELIVERED
+    DELIVERED
 }

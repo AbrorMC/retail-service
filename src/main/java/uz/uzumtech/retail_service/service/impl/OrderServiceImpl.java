@@ -11,6 +11,7 @@ import uz.uzumtech.retail_service.dto.response.OrderResponse;
 import uz.uzumtech.retail_service.dto.response.PageResponse;
 import uz.uzumtech.retail_service.entity.OrderItem;
 import uz.uzumtech.retail_service.exception.CartNotFoundException;
+import uz.uzumtech.retail_service.exception.OrderNotFoundException;
 import uz.uzumtech.retail_service.mapper.OrderMapper;
 import uz.uzumtech.retail_service.repository.CartRepository;
 import uz.uzumtech.retail_service.repository.OrderRepository;
@@ -58,5 +59,15 @@ public class OrderServiceImpl implements OrderService {
         var orderPage = orderRepository.findAll(pageable);
 
         return orderMapper.toPageResponse(orderPage);
+    }
+
+    @Override
+    @Transactional
+    public void updateStatus(Long orderId, OrderStatus status) {
+        var order = orderRepository
+                .findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId.toString()));
+
+        order.setStatus(status);
     }
 }

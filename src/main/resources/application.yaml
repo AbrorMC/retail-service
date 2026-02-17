@@ -69,5 +69,6 @@ kafka:
 
   topic:
     payment-events-topic: ${KAFKA_PAYMENT_EVENTS_TOPIC:payment_events}
+    payment-commands-topic: ${KAFKA_PAYMENT_COMMANDS_TOPIC:payment_commands}
     inventory-commands-topic: ${KAFKA_INVENTORY_COMMANDS_TOPIC:inventory_commands}
     inventory-events-topic: ${KAFKA_INVENTORY_EVENTS_TOPIC:inventory_events}

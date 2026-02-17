@@ -8,7 +8,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import uz.uzumtech.retail_service.component.kafka.producer.PaymentCommandProducer;
 import uz.uzumtech.retail_service.constant.enums.EventStatus;
+import uz.uzumtech.retail_service.constant.enums.OrderStatus;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 import uz.uzumtech.retail_service.service.OrderService;
 
@@ -19,15 +21,22 @@ import uz.uzumtech.retail_service.service.OrderService;
 public class InventoryEventConsumer {
 
     OrderService orderService;
+    PaymentCommandProducer paymentCommandProducer;
 
     @KafkaListener(topics = "${kafka.topic.inventory-events-topic}", containerFactory = "inventoryEventFactory")
     public void inventoryEventListener(@Payload KafkaMessageDto payload, Acknowledgment acknowledgment) {
         acknowledgment.acknowledge();
 
         if (payload.message().equals(EventStatus.INVENTORY_RESERVED.toString())) {
-            //TODO: orderService.updateStatus(EventStatus.SUCCESS)
+            orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.DELIVERED);
         } else {
-            //TODO: orderService.refund()
+            paymentCommandProducer.sendMessage(
+                    new KafkaMessageDto(
+                            payload.key(),
+                            EventStatus.REFUND_PAYMENT.toString(),
+                            payload.correlationId()
+                    )
+            );
         }
     }
 }
