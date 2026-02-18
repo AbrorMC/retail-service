@@ -41,8 +41,6 @@ public class PaymentCommandConsumer {
 
         var paymentResponse = transactionServiceAdapter.refund(paymentMapper.toRequest(paymentEntity));
 
-        //TODO: circuit breaker for transaction service
-
         log.info("inventoryCommandListener consumer {}", payload);
     }
 }

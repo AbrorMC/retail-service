@@ -19,6 +19,8 @@ import uz.uzumtech.retail_service.dto.response.PaymentResponse;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TransactionServiceAdapter {
 
+    //TODO: circuit breaker for transaction service adapter
+
     RestClient restClient;
 
      public PaymentResponse sendTransaction(PaymentRequest request) {

@@ -11,7 +11,9 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Modifying
     @Query(value = """
         UPDATE inventories inv
-        SET quantity = inv.quantity - required.needed
+        SET
+            quantity = required.needed,
+            actual_stock = inv.actual_stock - required.needed
         FROM (
             SELECT ri.ingredient_id, SUM(oi.count * ri.quantity) as needed
             FROM order_items oi

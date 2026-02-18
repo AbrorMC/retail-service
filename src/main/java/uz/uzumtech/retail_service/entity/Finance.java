@@ -5,6 +5,9 @@ import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import uz.uzumtech.retail_service.constant.enums.FinancialState;
 
 import java.math.BigDecimal;
 
@@ -14,26 +17,19 @@ import java.math.BigDecimal;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "inventories")
+@Table(name = "finances")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Inventory extends BaseEntity {
+public class Finance extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "ingredient_id", nullable = false)
-    Ingredient ingredient;
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false)
+    FinancialState state;
 
     @Positive
     @Column(precision = 19, scale = 2, nullable = false)
-    BigDecimal quantity;
-
-    @Positive
-    @Column(precision = 19, scale = 2, nullable = false)
-    BigDecimal actualStock;
-
-    @Version
-    Long version;
+    BigDecimal amount;
 }
