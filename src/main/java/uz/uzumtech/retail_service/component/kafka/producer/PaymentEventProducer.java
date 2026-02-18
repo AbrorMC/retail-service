@@ -10,6 +10,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import uz.uzumtech.retail_service.configuration.props.KafkaProps;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
+import uz.uzumtech.retail_service.dto.kafka.PaymentEventDto;
 
 @Slf4j
 @Component
@@ -17,18 +18,18 @@ import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 public class PaymentEventProducer {
 
     KafkaProps kafkaProps;
-    KafkaTemplate<String, KafkaMessageDto> paymentEventsTemplate;
+    KafkaTemplate<String, PaymentEventDto> paymentEventsTemplate;
 
     public PaymentEventProducer(KafkaProps kafkaProps,
                                 @Qualifier("paymentEventsTopic")
-                         KafkaTemplate<String, KafkaMessageDto> paymentEventsTemplate) {
+                         KafkaTemplate<String, PaymentEventDto> paymentEventsTemplate) {
         this.kafkaProps = kafkaProps;
         this.paymentEventsTemplate = paymentEventsTemplate;
     }
 
 
-    public void sendMessage(final KafkaMessageDto payload) {
-        final Message<KafkaMessageDto> message = MessageBuilder
+    public void sendMessage(final PaymentEventDto payload) {
+        final Message<PaymentEventDto> message = MessageBuilder
                 .withPayload(payload)
                 .setHeader(KafkaHeaders.TOPIC, kafkaProps.getTopic().getPaymentEventsTopic())
                 .setHeader(KafkaHeaders.KEY, payload.key())

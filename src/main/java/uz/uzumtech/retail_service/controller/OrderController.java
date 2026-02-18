@@ -11,6 +11,7 @@ import uz.uzumtech.retail_service.component.kafka.producer.PaymentEventProducer;
 import uz.uzumtech.retail_service.constant.enums.EventStatus;
 import uz.uzumtech.retail_service.dto.PaymentWebhookDto;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
+import uz.uzumtech.retail_service.dto.kafka.PaymentEventDto;
 import uz.uzumtech.retail_service.dto.request.OrderRequest;
 import uz.uzumtech.retail_service.dto.response.OrderResponse;
 import uz.uzumtech.retail_service.dto.response.PageResponse;
@@ -49,10 +50,10 @@ public class OrderController {
                 EventStatus.PAYMENT_SUCCESS.toString() :
                 EventStatus.PAYMENT_FAILED.toString();
 
-        KafkaMessageDto event = new KafkaMessageDto(
+        PaymentEventDto event = new PaymentEventDto(
                 webhookData.referenceId().toString(),
                 UUID.randomUUID().toString(),
-                status
+                webhookData
         );
 
         paymentEventProducer.sendMessage(event);
