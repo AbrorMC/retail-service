@@ -54,6 +54,11 @@ public class ProducerConfiguration {
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(objectDeserializerConfigs()));
     }
 
+    @Bean("paymentCommandsTopic")
+    public KafkaTemplate<String, KafkaMessageDto> paymentCommandsTemplate() {
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(objectDeserializerConfigs()));
+    }
+
     @Bean("inventoryCommandsTopic")
     public KafkaTemplate<String, KafkaMessageDto> inventoryCommandsTemplate() {
         return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(objectDeserializerConfigs()));

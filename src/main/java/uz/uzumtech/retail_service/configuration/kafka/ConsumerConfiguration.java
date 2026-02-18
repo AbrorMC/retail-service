@@ -78,4 +78,9 @@ public class ConsumerConfiguration {
     public ConcurrentKafkaListenerContainerFactory<String, KafkaMessageDto> inventoryEventFactory() {
         return buildContainerFactory(KafkaMessageDto.class);
     }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, KafkaMessageDto> paymentCommandFactory() {
+        return buildContainerFactory(KafkaMessageDto.class);
+    }
 }

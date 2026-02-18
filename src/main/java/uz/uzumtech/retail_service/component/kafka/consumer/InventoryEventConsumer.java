@@ -28,8 +28,16 @@ public class InventoryEventConsumer {
         acknowledgment.acknowledge();
 
         if (payload.message().equals(EventStatus.INVENTORY_RESERVED.toString())) {
-            orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.DELIVERED);
+            log.info("Inventory reserved successfully for order id: {}", payload.key());
+
+            orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.COMPLETED);
+
+            //TODO: reportService -> makeRecord() for successful order
         } else {
+            log.error("Inventory reservation failed for order id: {}", payload.key());
+
+            orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.CANCELED);
+
             paymentCommandProducer.sendMessage(
                     new KafkaMessageDto(
                             payload.key(),

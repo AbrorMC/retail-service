@@ -64,7 +64,7 @@ services:
     command: |
       "
       /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic payment_events --partitions 16 --replication-factor 1 && \
-      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic inventory_results --partitions 16 --replication-factor 1 && \
+      /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic inventory_events --partitions 16 --replication-factor 1 && \
       /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic payment_commands --partitions 8 --replication-factor 1 && \
       /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --create --if-not-exists --topic inventory_commands --partitions 8 --replication-factor 1
       "

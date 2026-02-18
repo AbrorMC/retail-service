@@ -33,6 +33,7 @@ public class KafkaProps {
         String paymentEventsTopic;
         String inventoryCommandsTopic;
         String inventoryEventsTopic;
+        String paymentCommandsTopic;
     }
 
 }

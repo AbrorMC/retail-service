@@ -38,4 +38,22 @@ public class TransactionServiceAdapter {
 
          return result;
     }
+
+    public PaymentResponse refund(PaymentRequest request) {
+
+        var result = restClient
+                .post()
+                .uri("http://localhost:8082/api/v1/refunds")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, (req, res) -> {
+                    log.error("Transaction Service returned: {}", res.getStatusCode());
+                })
+                .body(PaymentResponse.class);
+
+        log.info("{}", result);
+
+        return result;
+    }
 }

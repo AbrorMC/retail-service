@@ -14,6 +14,7 @@ import uz.uzumtech.retail_service.constant.enums.EventStatus;
 import uz.uzumtech.retail_service.constant.enums.OrderStatus;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 import uz.uzumtech.retail_service.repository.OrderRepository;
+import uz.uzumtech.retail_service.service.OrderService;
 
 @Slf4j
 @Component
@@ -21,30 +22,26 @@ import uz.uzumtech.retail_service.repository.OrderRepository;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PaymentEventConsumer {
 
-    OrderRepository orderRepository;
+    OrderService orderService;
     InventoryCommandProducer inventoryCommandProducer;
 
     @KafkaListener(topics = "${kafka.topic.payment-events-topic}", containerFactory = "paymentEventFactory")
     public void paymentEventListener(@Payload KafkaMessageDto payload, Acknowledgment acknowledgment) {
         acknowledgment.acknowledge();
 
-        if (payload.message().equals(EventStatus.PAYMENT_FAILED.toString())) return;
+        var orderStatus = EventStatus.valueOf(payload.message()) == EventStatus.PAYMENT_SUCCESS ?
+                OrderStatus.PAID : OrderStatus.CANCELED;
+        orderService.updateStatus(Long.parseLong(payload.key()), orderStatus);
 
-        //TODO: move to updateStatus() method of orderService
-        orderRepository.findById(Long.parseLong(payload.correlationId()))
-                .ifPresent(order -> {
-                    order.setStatus(OrderStatus.PAID);
-                    orderRepository.save(order);
-                });
-
-        inventoryCommandProducer.sendMessage(
-                new KafkaMessageDto(
-                    payload.key(),
-                    payload.correlationId(),
-                    "RESERVE_ITEMS"
-                )
-        );
-
+        if (orderStatus == OrderStatus.PAID) {
+            inventoryCommandProducer.sendMessage(
+                    new KafkaMessageDto(
+                            payload.key(),
+                            payload.correlationId(),
+                            EventStatus.RESERVE_INVENTORY.toString()
+                    )
+            );
+        }
         log.info("paymentEventListener consumer {}", payload);
     }
 }

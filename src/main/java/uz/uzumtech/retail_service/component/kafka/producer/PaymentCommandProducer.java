@@ -30,7 +30,7 @@ public class PaymentCommandProducer {
     public void sendMessage(final KafkaMessageDto payload) {
         final Message<KafkaMessageDto> message = MessageBuilder
                 .withPayload(payload)
-                .setHeader(KafkaHeaders.TOPIC, kafkaProps.getTopic().getPaymentEventsTopic())
+                .setHeader(KafkaHeaders.TOPIC, kafkaProps.getTopic().getPaymentCommandsTopic())
                 .setHeader(KafkaHeaders.KEY, payload.key())
                 .setHeader(KafkaHeaders.CORRELATION_ID, payload.correlationId())
                 .build();

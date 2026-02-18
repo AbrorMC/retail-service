@@ -20,7 +20,7 @@ public class InventoryEventProducer {
     KafkaTemplate<String, KafkaMessageDto> inventoryEventsTemplate;
 
     public InventoryEventProducer(KafkaProps kafkaProps,
-                                  @Qualifier("inventoryCommandsTopic")
+                                  @Qualifier("inventoryEventsTopic")
                          KafkaTemplate<String, KafkaMessageDto> inventoryEventsTemplate) {
         this.kafkaProps = kafkaProps;
         this.inventoryEventsTemplate = inventoryEventsTemplate;
