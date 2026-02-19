@@ -33,7 +33,7 @@ public class InventoryCommandConsumer {
                 new KafkaMessageDto(
                         payload.key(),
                         payload.correlationId(),
-                        status == EventStatus.INVENTORY_RESERVED ? status.toString() : EventStatus.OUT_OF_STOCK.toString()
+                        status.toString()
                 )
         );
 

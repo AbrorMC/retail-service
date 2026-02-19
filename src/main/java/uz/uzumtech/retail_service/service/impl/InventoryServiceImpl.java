@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.uzumtech.retail_service.constant.enums.EventStatus;
 import uz.uzumtech.retail_service.exception.InsufficientStockException;
 import uz.uzumtech.retail_service.repository.InventoryRepository;
@@ -28,7 +29,11 @@ public class InventoryServiceImpl implements InventoryService {
         if (updatedRows == (int) expectedCount) {
             return EventStatus.INVENTORY_RESERVED;
         } else {
-            throw new InsufficientStockException("Insufficient stock for " + orderId);
+            TransactionAspectSupport
+                    .currentTransactionStatus()
+                    .setRollbackOnly();
+
+            return EventStatus.OUT_OF_STOCK;
         }
     }
 }

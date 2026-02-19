@@ -37,13 +37,13 @@ public class InventoryEventConsumer {
 
             orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.COMPLETED);
 
-            reportService.registerIncome(BigDecimal.ONE);
-            reportService.registerExpense(BigDecimal.ZERO);
+            reportService.registerIncome(BigDecimal.TEN);
+            reportService.registerExpense(BigDecimal.TWO);
             //TODO: fix payload type to get actual amount for financial records
         } else {
             log.error("Inventory reservation failed for order id: {}", payload.key());
 
-            orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.CANCELED);
+            orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.CANCELLED);
 
             paymentCommandProducer.sendMessage(
                     new KafkaMessageDto(

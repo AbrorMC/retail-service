@@ -22,7 +22,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
             GROUP BY ri.ingredient_id
         ) AS required
         WHERE inv.ingredient_id = required.ingredient_id
-          AND inv.quantity >= required.needed
+          AND inv.actual_stock >= required.needed
         """, nativeQuery = true)
     int writeOffInventory(@Param("orderId") Long orderId);
 }
