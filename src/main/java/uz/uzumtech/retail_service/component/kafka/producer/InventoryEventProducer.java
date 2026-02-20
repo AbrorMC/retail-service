@@ -10,6 +10,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import uz.uzumtech.retail_service.configuration.props.KafkaProps;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
+import uz.uzumtech.retail_service.dto.kafka.InventoryEventDto;
 
 @Slf4j
 @Component
@@ -17,18 +18,18 @@ import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 public class InventoryEventProducer {
 
     KafkaProps kafkaProps;
-    KafkaTemplate<String, KafkaMessageDto> inventoryEventsTemplate;
+    KafkaTemplate<String, InventoryEventDto> inventoryEventsTemplate;
 
     public InventoryEventProducer(KafkaProps kafkaProps,
                                   @Qualifier("inventoryEventsTopic")
-                         KafkaTemplate<String, KafkaMessageDto> inventoryEventsTemplate) {
+                         KafkaTemplate<String, InventoryEventDto> inventoryEventsTemplate) {
         this.kafkaProps = kafkaProps;
         this.inventoryEventsTemplate = inventoryEventsTemplate;
     }
 
 
-    public void sendMessage(final KafkaMessageDto payload) {
-        final Message<KafkaMessageDto> message = MessageBuilder
+    public void sendMessage(final InventoryEventDto payload) {
+        final Message<InventoryEventDto> message = MessageBuilder
                 .withPayload(payload)
                 .setHeader(KafkaHeaders.TOPIC, kafkaProps.getTopic().getInventoryEventsTopic())
                 .setHeader(KafkaHeaders.KEY, payload.key())

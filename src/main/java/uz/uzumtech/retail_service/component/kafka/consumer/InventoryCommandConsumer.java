@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import uz.uzumtech.retail_service.component.kafka.producer.InventoryEventProducer;
 import uz.uzumtech.retail_service.constant.enums.EventStatus;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
+import uz.uzumtech.retail_service.dto.kafka.InventoryEventDto;
 import uz.uzumtech.retail_service.service.InventoryService;
 
 @Slf4j
@@ -30,10 +31,14 @@ public class InventoryCommandConsumer {
         EventStatus status = inventoryService.consumeIngredients(Long.parseLong(payload.key()));
 
         inventoryEventProducer.sendMessage(
-                new KafkaMessageDto(
+                new InventoryEventDto(
                         payload.key(),
                         payload.correlationId(),
-                        status.toString()
+                        new InventoryEventDto.InventoryEventMessage(
+                                status,
+                                inventoryService.getIncome(),
+                                inventoryService.getExpense()
+                        )
                 )
         );
 

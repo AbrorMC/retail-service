@@ -27,6 +27,8 @@ repositories {
 dependencies {
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework:spring-aop'
+    implementation 'org.aspectj:aspectjweaver'
 
     // Spring Boot Web
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
@@ -65,25 +67,18 @@ dependencies {
     // REST Client
     implementation 'org.springframework.boot:spring-boot-starter-restclient'
 
-    // Testing
-    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation 'org.springframework:spring-aop'
-//    implementation 'org.aspectj:aspectjweaver'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //Circuit Breaker
+    implementation 'io.github.resilience4j:resilience4j-spring-boot2:1.7.1'
 
     // Lombok
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    // Core tests
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
     // Testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'com.h2database:h2'
 }
 

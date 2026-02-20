@@ -11,6 +11,8 @@ import uz.uzumtech.retail_service.repository.InventoryRepository;
 import uz.uzumtech.retail_service.repository.OrderItemRepository;
 import uz.uzumtech.retail_service.service.InventoryService;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
@@ -35,5 +37,17 @@ public class InventoryServiceImpl implements InventoryService {
 
             return EventStatus.OUT_OF_STOCK;
         }
+    }
+
+    @Override
+    public BigDecimal getIncome() {
+        //TODO: implement income calculation logic
+        return BigDecimal.ONE;
+    }
+
+    @Override
+    public BigDecimal getExpense() {
+        //TODO: implement expense calculation logic
+        return BigDecimal.ONE;
     }
 }

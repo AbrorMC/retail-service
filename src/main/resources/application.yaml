@@ -72,3 +72,21 @@ kafka:
     payment-commands-topic: ${KAFKA_PAYMENT_COMMANDS_TOPIC:payment_commands}
     inventory-commands-topic: ${KAFKA_INVENTORY_COMMANDS_TOPIC:inventory_commands}
     inventory-events-topic: ${KAFKA_INVENTORY_EVENTS_TOPIC:inventory_events}
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      transactionService:
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 2
+        sliding-window-size: 10
+  retry:
+    instances:
+      currencyService:
+        max-attempts: 3
+        wait-duration: 2s
+  timelimiter:
+    instances:
+      currencyService:
+        timeout-duration: 3s

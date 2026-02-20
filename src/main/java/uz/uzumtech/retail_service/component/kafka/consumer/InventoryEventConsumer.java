@@ -10,9 +10,9 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import uz.uzumtech.retail_service.component.kafka.producer.PaymentCommandProducer;
 import uz.uzumtech.retail_service.constant.enums.EventStatus;
-import uz.uzumtech.retail_service.constant.enums.FinancialState;
 import uz.uzumtech.retail_service.constant.enums.OrderStatus;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
+import uz.uzumtech.retail_service.dto.kafka.InventoryEventDto;
 import uz.uzumtech.retail_service.service.OrderService;
 import uz.uzumtech.retail_service.service.ReportService;
 
@@ -29,17 +29,16 @@ public class InventoryEventConsumer {
     ReportService reportService;
 
     @KafkaListener(topics = "${kafka.topic.inventory-events-topic}", containerFactory = "inventoryEventFactory")
-    public void inventoryEventListener(@Payload KafkaMessageDto payload, Acknowledgment acknowledgment) {
+    public void inventoryEventListener(@Payload InventoryEventDto payload, Acknowledgment acknowledgment) {
         acknowledgment.acknowledge();
 
-        if (payload.message().equals(EventStatus.INVENTORY_RESERVED.toString())) {
+        if (payload.message().status().equals(EventStatus.INVENTORY_RESERVED)) {
             log.info("Inventory reserved successfully for order id: {}", payload.key());
 
             orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.COMPLETED);
 
-            reportService.registerIncome(BigDecimal.TEN);
-            reportService.registerExpense(BigDecimal.TWO);
-            //TODO: fix payload type to get actual amount for financial records
+            reportService.registerIncome(payload.message().income());
+            reportService.registerExpense(payload.message().expense());
         } else {
             log.error("Inventory reservation failed for order id: {}", payload.key());
 

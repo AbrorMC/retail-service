@@ -3,9 +3,9 @@ package uz.uzumtech.retail_service.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import uz.uzumtech.retail_service.constant.enums.Currency;
 
 import java.math.BigDecimal;
-import java.util.Currency;
 
 public record PaymentRequest(
         @NotNull(message = "referenceId required")
