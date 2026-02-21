@@ -8,5 +8,7 @@ public interface CartService {
 
     OrderItemResponse addItem(OrderItemRequest request);
     CartResponse getItemsOfCart(Long cartId);
+    void deleteItem(Long cartId, Long itemId);
+    void clear(Long cartId);
 
 }

@@ -24,6 +24,7 @@ public class TransactionServiceAdapter {
 
     RestClient restClient;
 
+
     @CircuitBreaker(name = "transactionService", fallbackMethod = "fallbackSendTransaction")
      public PaymentResponse sendTransaction(PaymentRequest request) {
 

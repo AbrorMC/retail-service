@@ -6,6 +6,7 @@ CREATE TABLE finances (
     id BIGSERIAL PRIMARY KEY,
     state financial_state_type NOT NULL,
     amount NUMERIC(19,2) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

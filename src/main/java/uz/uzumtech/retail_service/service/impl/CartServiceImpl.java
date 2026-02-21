@@ -11,6 +11,7 @@ import uz.uzumtech.retail_service.dto.response.CartResponse;
 import uz.uzumtech.retail_service.entity.OrderItem;
 import uz.uzumtech.retail_service.exception.CartNotFoundException;
 import uz.uzumtech.retail_service.exception.FoodNotFoundException;
+import uz.uzumtech.retail_service.exception.OrderItemNotFoundException;
 import uz.uzumtech.retail_service.exception.PriceNotFoundException;
 import uz.uzumtech.retail_service.mapper.OrderItemMapper;
 import uz.uzumtech.retail_service.mapper.CartMapper;
@@ -70,4 +71,30 @@ public class CartServiceImpl implements CartService {
 
         return cartMapper.toResponse(cart);
     }
+
+    @Override
+    @Transactional
+    public void deleteItem(Long cartId, Long itemId) {
+        var cart = cartRepository
+                .findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException(cartId.toString()));
+
+        var item = orderItemRepository
+                .findById(itemId)
+                .orElseThrow(() -> new OrderItemNotFoundException(itemId.toString()));
+
+        cart.removeItem(item);
+    }
+
+    @Override
+    @Transactional
+    public void clear(Long cartId) {
+        var cart = cartRepository
+                .findById(cartId)
+                .orElseThrow(() -> new CartNotFoundException(cartId.toString()));
+
+        cart.removeAllItems();
+    }
+
+
 }

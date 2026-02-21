@@ -53,6 +53,10 @@ server:
     min-response-size: 2KB
     mime-types: application/json, application/xml, text/xml, text/plain
 
+services:
+  transaction-processing:
+    url: ${TRANSACTION_PROCESSING_URL:http://localhost:8082}
+
 # Kafka
 kafka:
   bootstrapServers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}

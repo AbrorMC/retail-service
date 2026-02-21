@@ -14,6 +14,7 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import uz.uzumtech.retail_service.configuration.props.KafkaProps;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
+import uz.uzumtech.retail_service.dto.kafka.InventoryEventDto;
 import uz.uzumtech.retail_service.dto.kafka.PaymentEventDto;
 import uz.uzumtech.retail_service.handler.KafkaExceptionHandler;
 
@@ -76,8 +77,8 @@ public class ConsumerConfiguration {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, KafkaMessageDto> inventoryEventFactory() {
-        return buildContainerFactory(KafkaMessageDto.class);
+    public ConcurrentKafkaListenerContainerFactory<String, InventoryEventDto> inventoryEventFactory() {
+        return buildContainerFactory(InventoryEventDto.class);
     }
 
     @Bean

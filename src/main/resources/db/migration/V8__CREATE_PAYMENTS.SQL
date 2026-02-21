@@ -1,16 +1,11 @@
--- 1. Создаем ENUM типы (если они еще не созданы)
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'transaction_type') THEN
-        CREATE TYPE transaction_type AS ENUM ('PAYMENT', 'REFUND');
-    END IF;
+CREATE TYPE transaction_type AS ENUM (
+    'PAYMENT', 'REFUND'
+);
 
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'payment_status_type') THEN
-        CREATE TYPE payment_status_type AS ENUM ('CREATED', 'COMPLETED', 'REFUND', 'FAILED');
-    END IF;
-END $$;
+CREATE TYPE payment_status_type AS ENUM (
+    'CREATED', 'COMPLETED', 'REFUND', 'FAILED'
+);
 
--- 2. Создаем таблицу payments
 CREATE TABLE IF NOT EXISTS payments (
     id              BIGSERIAL PRIMARY KEY,
     reference_id    BIGINT NOT NULL,
@@ -23,11 +18,9 @@ CREATE TABLE IF NOT EXISTS payments (
     receiver_name   VARCHAR(255) NOT NULL,
     receiver_token  VARCHAR(255) NOT NULL,
 
-    -- Поля из BaseEntity (обычно это они)
     is_active       BOOLEAN DEFAULT TRUE,
     created_at      TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. Индекс для быстрого поиска по reference_id (часто используется в логике)
 CREATE INDEX IF NOT EXISTS idx_payments_reference_id ON payments(reference_id);

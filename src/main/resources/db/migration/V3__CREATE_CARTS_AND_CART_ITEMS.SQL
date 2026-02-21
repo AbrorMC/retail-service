@@ -16,18 +16,18 @@ CREATE TABLE order_items (
     count INTEGER NOT NULL,
     price NUMERIC(19,2) NOT NULL,
 
-    CONSTRAINT fk_cart_items_on_order FOREIGN KEY (order_id)
+    CONSTRAINT fk_order_items_on_order FOREIGN KEY (order_id)
     REFERENCES orders (id) ON DELETE CASCADE,
 
-    CONSTRAINT chk_cart_item_count CHECK(count > 0),
+    CONSTRAINT chk_order_item_count CHECK(count > 0),
 
-    CONSTRAINT fk_cart_items_on_cart FOREIGN KEY (cart_id)
+    CONSTRAINT fk_order_items_on_cart FOREIGN KEY (cart_id)
     REFERENCES carts (id) ON DELETE CASCADE,
 
-    CONSTRAINT fk_cart_items_on_food FOREIGN KEY (food_id)
+    CONSTRAINT fk_order_items_on_food FOREIGN KEY (food_id)
     REFERENCES foods (id)
 );
 
-CREATE INDEX idx_cart_items_cart_id ON cart_items(cart_id);
+CREATE INDEX idx_order_items_cart_id ON order_items(cart_id);
 
 INSERT INTO carts (user_id) VALUES (1), (2), (3), (4), (5);

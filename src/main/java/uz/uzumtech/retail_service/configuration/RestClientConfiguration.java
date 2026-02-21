@@ -1,5 +1,6 @@
 package uz.uzumtech.retail_service.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.http.client.ClientHttpRequestFactoryBuilder;
 import org.springframework.boot.http.client.HttpClientSettings;
 import org.springframework.context.annotation.Bean;
@@ -14,10 +15,12 @@ import java.time.Duration;
 public class RestClientConfiguration {
 
     @Bean
-    public RestClient restClient(RestClient.Builder builder) {
+    public RestClient restClient(RestClient.Builder builder,
+                                 @Value("${services.transaction-processing.url}") String baseUrl) {
         return builder
                 .requestFactory(clientHttpRequestFactory())
                 .defaultStatusHandler(new RestClientExceptionHandler())
+                .baseUrl(baseUrl)
                 .build();
     }
 

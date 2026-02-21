@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import uz.uzumtech.retail_service.entity.Food;
 
 public interface FoodRepository extends JpaRepository<Food, Long> {
+
     Page<Food> findAllByCategoryId(Long id, Pageable pageable);
 
     @Query(value = """
@@ -17,5 +18,6 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
                   WHERE ri.food_id = :food_id AND i.quantity < ri.quantity
               )
             """, nativeQuery = true)
+    //TODO: 1. Создать materialized view на уровне БД
     boolean isFoodAvailable(@Param("food_id") Long id);
 }
