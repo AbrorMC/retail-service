@@ -1,28 +1,31 @@
 package uz.uzumtech.retail_service.repository;
 
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import uz.uzumtech.retail_service.entity.Inventory;
 
+import java.util.List;
+import java.util.Map;
+
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
-    @Modifying
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query(value = """
-        UPDATE inventories inv
-        SET
-            quantity = required.needed,
-            actual_stock = inv.actual_stock - required.needed
-        FROM (
-            SELECT ri.ingredient_id, SUM(oi.count * ri.quantity) as needed
-            FROM order_items oi
-            JOIN receipt_items ri ON oi.food_id = ri.food_id
-            WHERE oi.order_id = :orderId
-            GROUP BY ri.ingredient_id
-        ) AS required
-        WHERE inv.ingredient_id = required.ingredient_id
-          AND inv.actual_stock >= required.needed
-        """, nativeQuery = true)
-    int writeOffInventory(@Param("orderId") Long orderId);
+            SELECT inv
+            FROM Inventory AS inv
+            WHERE inv.id IN (
+                SELECT
+                    MAX(inv2.id)
+                FROM Inventory AS inv2
+                JOIN ReceiptItem AS ri ON ri.ingredient.id = inv2.ingredient.id
+                JOIN OrderItem AS oi ON oi.food.id = ri.food.id
+                WHERE oi.order.id = :orderId
+                GROUP BY inv2.ingredient.id
+            )
+        """)
+    List<Inventory> lockAndGetInventories(@Param("orderId") Long orderId);
 }

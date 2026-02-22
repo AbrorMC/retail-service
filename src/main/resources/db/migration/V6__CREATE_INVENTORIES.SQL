@@ -9,6 +9,7 @@ CREATE TABLE inventories (
     quantity NUMERIC(19,2) NOT NULL DEFAULT 0,
     actual_stock NUMERIC(19,2) NOT NULL DEFAULT 0,
     version INTEGER NOT NULL DEFAULT 0,
+    is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -28,12 +29,12 @@ INSERT INTO inventories (ingredient_id, type, quantity, actual_stock) VALUES
 (4, 'INCOMING', 40000.00, 40000.00),   -- Картофель свежий (40 кг)
 (5, 'INCOMING', 25000.00, 25000.00),   -- Говядина (мякоть) (25 кг)
 (6, 'INCOMING', 15000.00, 15000.00),   -- Баранина (корейка) (15 кг)
-(7, 'INCOMING', 10000.00, 10000.00),   -- Куриное филе (10 кг)
-(8, 'INCOMING', 5000.00, 5000.00),     -- Тесто для сомсы (5 кг)
-(9, 'INCOMING', 100.00, 100.00),       -- Тесто для лаваша (100 шт)
-(10, 'INCOMING', 50.00, 50.00),        -- Булочка для бургера (50 шт)
-(11, 'INCOMING', 10000.00, 10000.00),  -- Масло хлопковое (10 л)
-(12, 'INCOMING', 100.00, 100.00),      -- Сыр Чеддер (100 слайсов)
-(13, 'INCOMING', 5000.00, 5000.00),    -- Соус чесночный (5 кг)
-(14, 'INCOMING', 2000.00, 2000.00),    -- Кофе зерновой (2 кг)
-(15, 'INCOMING', 20.00, 20.00);        -- Лимон свежий (20 шт)
+(7, 'INCOMING', 5000.00, 5000.00),     -- Тесто для сомсы (5 кг)
+(8, 'INCOMING', 100.00, 100.00),       -- Тесто для лаваша (100 шт)
+(9, 'INCOMING', 50.00, 50.00),         -- Булочка для бургера (50 шт)
+(10, 'INCOMING', 10000.00, 10000.00),  -- Масло хлопковое (10 л)
+(11, 'INCOMING', 100.00, 100.00),      -- Сыр Чеддер (100 слайсов)
+(12, 'INCOMING', 5000.00, 5000.00),    -- Соус чесночный (5 кг)
+(13, 'INCOMING', 2000.00, 2000.00),    -- Кофе зерновой (2 кг)
+(14, 'INCOMING', 20.00, 20.00),        -- Лимон свежий (20 шт)
+(15, 'INCOMING', 20.00, 20.00);        -- Компот домашний из сухофруктов (20 л)

@@ -40,7 +40,6 @@ INSERT INTO ingredients (name, unit) VALUES
 -- Мясо
 ('Говядина (мякоть)', 'GRAM'),
 ('Баранина (корейка)', 'GRAM'),
-('Куриное филе', 'GRAM'),
 -- Тесто и выпечка
 ('Тесто для сомсы (слоеное)', 'GRAM'),
 ('Тесто для лаваша', 'PIECE'),
@@ -50,7 +49,8 @@ INSERT INTO ingredients (name, unit) VALUES
 ('Сыр Чеддер (слайсы)', 'PIECE'),
 ('Соус чесночный', 'GRAM'),
 ('Кофе зерновой (Blend)', 'GRAM'),
-('Лимон свежий', 'PIECE');
+('Лимон свежий', 'PIECE'),
+('Компот домашний из сухофруктов', 'LITRE');
 
 -- 1. Плов Ташкентский (Food 1)
 INSERT INTO receipt_items (food_id, ingredient_id, quantity) VALUES
@@ -93,6 +93,10 @@ INSERT INTO receipt_items (food_id, ingredient_id, quantity) VALUES
 -- 8. Чай с лимоном (Food 8)
 INSERT INTO receipt_items (food_id, ingredient_id, quantity) VALUES
 (8, 14, 0.50);  -- Лимон
+
+-- 9. Компот домашний из сухофруктов (Food 9)
+INSERT INTO receipt_items (food_id, ingredient_id, quantity) VALUES
+(9, 15, 0.25);  -- Лимон
 
 -- 10. Кофе Американо (Food 10)
 INSERT INTO receipt_items (food_id, ingredient_id, quantity) VALUES

@@ -5,13 +5,20 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import uz.uzumtech.retail_service.constant.InventoryTransactionType;
 import uz.uzumtech.retail_service.constant.enums.EventStatus;
-import uz.uzumtech.retail_service.exception.InsufficientStockException;
+import uz.uzumtech.retail_service.entity.Inventory;
+import uz.uzumtech.retail_service.repository.IngredientRequirement;
 import uz.uzumtech.retail_service.repository.InventoryRepository;
 import uz.uzumtech.retail_service.repository.OrderItemRepository;
 import uz.uzumtech.retail_service.service.InventoryService;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,18 +32,45 @@ public class InventoryServiceImpl implements InventoryService {
     @Transactional
     public EventStatus consumeIngredients(Long orderId) {
 
-        long expectedCount = orderItemRepository.countUniqueIngredientsByOrderId(orderId);
-        int updatedRows = inventoryRepository.writeOffInventory(orderId);
+        Map<Long, Inventory> inventories = inventoryRepository
+                .lockAndGetInventories(orderId)
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                        inv -> inv.getIngredient().getId(),
+                        inv -> inv)
+                );
 
-        if (updatedRows == (int) expectedCount) {
-            return EventStatus.INVENTORY_RESERVED;
-        } else {
-            TransactionAspectSupport
-                    .currentTransactionStatus()
-                    .setRollbackOnly();
+        List<IngredientRequirement> neededIngredients = orderItemRepository
+                .getNeededIngredientsByOrderId(orderId);
 
-            return EventStatus.OUT_OF_STOCK;
+        List<Inventory> newRecords = new ArrayList<>();
+
+        for (var neededIngredient : neededIngredients) {
+            Long ingredientId = neededIngredient.getIngredientId();
+            BigDecimal neededQuantity = neededIngredient.getTotalQuantity();
+
+            var inventory = inventories.get(ingredientId);
+
+            if (inventory == null || inventory.getActualStock().compareTo(neededQuantity) < 0) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return EventStatus.OUT_OF_STOCK;
+            }
+
+            var record = Inventory.builder()
+                    .ingredient(inventory.getIngredient())
+                    .type(InventoryTransactionType.WRITE_OFF)
+                    .quantity(neededQuantity)
+                    .actualStock(inventory.getActualStock().subtract(neededQuantity))
+                    .createdAt(LocalDateTime.now())
+                    .build();
+
+            newRecords.add(record);
         }
+
+        inventoryRepository.saveAll(newRecords);
+
+        return EventStatus.INVENTORY_RESERVED;
     }
 
     @Override
