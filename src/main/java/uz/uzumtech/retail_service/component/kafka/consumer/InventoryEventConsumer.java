@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.internals.events.CompletableEvent;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -17,6 +18,9 @@ import uz.uzumtech.retail_service.service.OrderService;
 import uz.uzumtech.retail_service.service.ReportService;
 
 import java.math.BigDecimal;
+import java.util.concurrent.CompletableFuture;
+
+import static java.util.concurrent.CompletableFuture.runAsync;
 
 @Slf4j
 @Component
@@ -43,6 +47,10 @@ public class InventoryEventConsumer {
             log.error("Inventory reservation failed for order id: {}", payload.key());
 
             orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.CANCELLED);
+
+            //TODO: Обновление materialized view доступности блюд на уровне БД
+//            CompletableFuture.runAsync(() ->
+//                    reportService.registerFailedOrder(Long.parseLong(payload.key()), payload.message().income()));
 
             paymentCommandProducer.sendMessage(
                     new KafkaMessageDto(
