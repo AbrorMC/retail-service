@@ -6,14 +6,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.uzumtech.retail_service.constant.InventoryTransactionType;
-import uz.uzumtech.retail_service.constant.enums.EventStatus;
 import uz.uzumtech.retail_service.entity.Inventory;
+import uz.uzumtech.retail_service.exception.OrderNotFoundException;
 import uz.uzumtech.retail_service.repository.IngredientRequirement;
 import uz.uzumtech.retail_service.repository.InventoryRepository;
 import uz.uzumtech.retail_service.repository.OrderItemRepository;
+import uz.uzumtech.retail_service.repository.OrderRepository;
 import uz.uzumtech.retail_service.service.InventoryService;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +29,11 @@ public class InventoryServiceImpl implements InventoryService {
 
     InventoryRepository inventoryRepository;
     OrderItemRepository orderItemRepository;
+    OrderRepository orderRepository;
 
     @Override
     @Transactional
-    public EventStatus consumeIngredients(Long orderId) {
+    public BigDecimal consumeIngredients(Long orderId) {
 
         Map<Long, Inventory> inventories = inventoryRepository
                 .lockAndGetInventories(orderId)
@@ -54,14 +57,19 @@ public class InventoryServiceImpl implements InventoryService {
 
             if (inventory == null || inventory.getActualStock().compareTo(neededQuantity) < 0) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                return EventStatus.OUT_OF_STOCK;
+                return BigDecimal.ZERO;
             }
+
+            BigDecimal inventoryTotalCost = inventory.getTotalCost()
+                    .divide(inventory.getQuantity(), RoundingMode.CEILING)
+                    .multiply(neededQuantity);
 
             var record = Inventory.builder()
                     .ingredient(inventory.getIngredient())
                     .type(InventoryTransactionType.WRITE_OFF)
                     .quantity(neededQuantity)
                     .actualStock(inventory.getActualStock().subtract(neededQuantity))
+                    .totalCost(inventoryTotalCost)
                     .createdAt(LocalDateTime.now())
                     .build();
 
@@ -70,18 +78,17 @@ public class InventoryServiceImpl implements InventoryService {
 
         inventoryRepository.saveAll(newRecords);
 
-        return EventStatus.INVENTORY_RESERVED;
+        return newRecords.stream()
+                .map(Inventory::getTotalCost)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
-    public BigDecimal getIncome() {
-        //TODO: implement income calculation logic
-        return BigDecimal.ONE;
-    }
+    public BigDecimal getIncome(Long orderId) {
+        var order = orderRepository
+                .findById(orderId)
+                .orElseThrow(() -> new OrderNotFoundException(orderId.toString()));
 
-    @Override
-    public BigDecimal getExpense() {
-        //TODO: implement expense calculation logic
-        return BigDecimal.ONE;
+        return order.getTotalPrice();
     }
 }

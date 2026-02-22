@@ -15,6 +15,8 @@ import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 import uz.uzumtech.retail_service.dto.kafka.InventoryEventDto;
 import uz.uzumtech.retail_service.service.InventoryService;
 
+import java.math.BigDecimal;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -28,7 +30,11 @@ public class InventoryCommandConsumer {
     public void inventoryCommandListener(@Payload KafkaMessageDto payload, Acknowledgment acknowledgment) {
         acknowledgment.acknowledge();
 
-        EventStatus status = inventoryService.consumeIngredients(Long.parseLong(payload.key()));
+        Long orderId = Long.parseLong(payload.key());
+        BigDecimal totalCost = inventoryService.consumeIngredients(orderId);
+
+        var status = totalCost.compareTo(BigDecimal.ZERO) > 0 ?
+                EventStatus.INVENTORY_RESERVED : EventStatus.OUT_OF_STOCK;
 
         inventoryEventProducer.sendMessage(
                 new InventoryEventDto(
@@ -36,8 +42,8 @@ public class InventoryCommandConsumer {
                         payload.correlationId(),
                         new InventoryEventDto.InventoryEventMessage(
                                 status,
-                                inventoryService.getIncome(),
-                                inventoryService.getExpense()
+                                inventoryService.getIncome(orderId),
+                                totalCost
                         )
                 )
         );

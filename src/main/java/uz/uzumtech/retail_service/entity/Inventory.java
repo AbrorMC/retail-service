@@ -41,8 +41,12 @@ public class Inventory extends BaseEntity {
     InventoryTransactionType type;
 
     @Positive
-    @Column(precision = 19, scale = 2, nullable = false)
+    @Column(name = "actual_stock", precision = 19, scale = 2, nullable = false)
     BigDecimal actualStock;
+
+    @Positive
+    @Column(name = "total_cost", precision = 19, scale = 2, nullable = false)
+    BigDecimal totalCost;
 
     @Version
     Long version;

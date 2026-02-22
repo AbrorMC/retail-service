@@ -9,8 +9,7 @@ import java.util.List;
 
 public interface InventoryService {
 
-    EventStatus consumeIngredients(Long orderId);
-    BigDecimal getIncome();
-    BigDecimal getExpense();
+    BigDecimal consumeIngredients(Long orderId);
+    BigDecimal getIncome(Long orderId);
 
 }
