@@ -1,7 +1,5 @@
 package uz.uzumtech.retail_service.dto.response;
 
-import uz.uzumtech.retail_service.constant.enums.FoodAvailability;
-
 import java.math.BigDecimal;
 import java.util.List;
 

@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.internals.events.CompletableEvent;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -15,14 +14,8 @@ import uz.uzumtech.retail_service.constant.enums.EventStatus;
 import uz.uzumtech.retail_service.constant.enums.OrderStatus;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 import uz.uzumtech.retail_service.dto.kafka.InventoryEventDto;
-import uz.uzumtech.retail_service.repository.FoodRepository;
 import uz.uzumtech.retail_service.service.OrderService;
 import uz.uzumtech.retail_service.service.ReportService;
-
-import java.math.BigDecimal;
-import java.util.concurrent.CompletableFuture;
-
-import static java.util.concurrent.CompletableFuture.runAsync;
 
 @Slf4j
 @Component

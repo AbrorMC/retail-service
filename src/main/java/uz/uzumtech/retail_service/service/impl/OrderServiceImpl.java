@@ -69,5 +69,9 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new OrderNotFoundException(orderId.toString()));
 
         order.setStatus(status);
+
+        if (status == OrderStatus.COMPLETED) {
+            order.setActive(false);
+        }
     }
 }
