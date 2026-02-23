@@ -41,8 +41,8 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<PageResponse<OrderResponse>> getAll(@RequestParam(defaultValue = "0") int page,
-                                                              @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(orderService.getAllOrders(page, size));
+                                                              @RequestParam(defaultValue = "10") int size, @RequestParam Long userId) {
+        return ResponseEntity.ok(orderService.getAllOrders(page, size, userId));
     }
 
     @PostMapping("/webhook")

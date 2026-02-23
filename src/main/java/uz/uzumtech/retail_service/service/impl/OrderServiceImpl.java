@@ -53,10 +53,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PageResponse<OrderResponse> getAllOrders(int page, int size) {
+    public PageResponse<OrderResponse> getAllOrders(int page, int size, Long userId) {
         var pageable = PaginationValidator.validate(page, size);
 
-        var orderPage = orderRepository.findAll(pageable);
+        var orderPage = orderRepository.findAllByUserId(userId, pageable);
 
         return orderMapper.toPageResponse(orderPage);
     }

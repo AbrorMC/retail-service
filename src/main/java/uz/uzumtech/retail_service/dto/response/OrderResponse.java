@@ -10,6 +10,7 @@ public record OrderResponse(
         OrderStatus status,
         Integer itemCount,
         BigDecimal totalPrice,
+        boolean isActive,
         String createdAt,
         String updatedAt
 ) {}
