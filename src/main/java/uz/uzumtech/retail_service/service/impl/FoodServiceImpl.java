@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.uzumtech.retail_service.constant.enums.FoodAvailability;
 import uz.uzumtech.retail_service.dto.response.FoodDetailsResponse;
 import uz.uzumtech.retail_service.dto.response.FoodResponse;
 import uz.uzumtech.retail_service.dto.response.PageResponse;
@@ -53,9 +54,17 @@ public class FoodServiceImpl implements FoodService {
                 .findByFoodIdAndIsActiveTrue(id)
                 .orElseThrow(() -> new PriceNotFoundException(id.toString()));
 
-        boolean isAvailable = foodRepository.isFoodAvailable(id);
+        int availableServings = foodRepository.getAvailableServings(id);
 
-        return foodMapper.toDetailedResponse(food, isAvailable, price.getPrice());
+        FoodAvailability availability = switch (availableServings) {
+            case 0 -> FoodAvailability.NOT_AVAILABLE;
+            case 1 -> FoodAvailability.ONE;
+            case 2 -> FoodAvailability.TWO;
+            case 3, 4, 5 -> FoodAvailability.ENDING;
+            default -> FoodAvailability.AVAILABLE;
+        };
+
+        return foodMapper.toDetailedResponse(food, availability, price.getPrice());
     }
 
 }

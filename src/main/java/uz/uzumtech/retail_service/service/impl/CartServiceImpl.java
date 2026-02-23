@@ -36,9 +36,9 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public OrderItemResponse addItem(OrderItemRequest request) {
-        boolean available = foodRepository.isFoodAvailable(request.foodId());
+        int available = foodRepository.getAvailableServings(request.foodId());
 
-        if (!available) {
+        if (available <= 0) {
             throw new IllegalStateException("Не доступно для выбора блюда с id: " + request.foodId());
         }
 
