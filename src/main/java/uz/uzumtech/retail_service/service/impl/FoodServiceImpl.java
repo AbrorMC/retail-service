@@ -8,13 +8,20 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.uzumtech.retail_service.dto.response.FoodDetailsResponse;
 import uz.uzumtech.retail_service.dto.response.FoodResponse;
 import uz.uzumtech.retail_service.dto.response.PageResponse;
+import uz.uzumtech.retail_service.entity.Food;
+import uz.uzumtech.retail_service.entity.Price;
 import uz.uzumtech.retail_service.exception.FoodNotFoundException;
+import uz.uzumtech.retail_service.exception.PriceNotFoundException;
 import uz.uzumtech.retail_service.mapper.FoodMapper;
 import uz.uzumtech.retail_service.repository.FoodRepository;
+import uz.uzumtech.retail_service.repository.PriceRepository;
 import uz.uzumtech.retail_service.service.FoodService;
 import uz.uzumtech.retail_service.utils.PaginationValidator;
 
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +30,7 @@ public class FoodServiceImpl implements FoodService {
 
     FoodMapper foodMapper;
     FoodRepository foodRepository;
+    PriceRepository priceRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -41,7 +49,13 @@ public class FoodServiceImpl implements FoodService {
                 .findById(id)
                 .orElseThrow(() -> new FoodNotFoundException(id.toString()));
 
-        return foodMapper.toDetailedResponse(food);
+        var price = priceRepository
+                .findByFoodIdAndIsActiveTrue(id)
+                .orElseThrow(() -> new PriceNotFoundException(id.toString()));
+
+        boolean isAvailable = foodRepository.isFoodAvailable(id);
+
+        return foodMapper.toDetailedResponse(food, isAvailable, price.getPrice());
     }
 
 }

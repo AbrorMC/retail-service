@@ -12,12 +12,13 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     Page<Food> findAllByCategoryId(Long id, Pageable pageable);
 
     @Query(value = """
-            SELECT NOT EXISTS (
-                  SELECT 1 FROM receipt_items ri
-                  JOIN inventories i ON ri.ingredient_id = i.ingredient_id
-                  WHERE ri.food_id = :food_id AND i.quantity < ri.quantity
-              )
+                SELECT COALESCE(
+                    (SELECT
+                        COALESCE(BOOL_AND(inv.actual_stock - ri.quantity >= 0), false) is_available
+                    FROM receipt_items ri
+                    LEFT JOIN mv_inventory_balances inv ON ri.ingredient_id = inv.ingredient_id
+                    WHERE ri.food_id = :foodId AND ri.is_active = TRUE),
+                FALSE)
             """, nativeQuery = true)
-    //TODO: 1. Создать materialized view на уровне БД
-    boolean isFoodAvailable(@Param("food_id") Long id);
+    boolean isFoodAvailable(@Param("foodId") Long id);
 }
