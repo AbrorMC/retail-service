@@ -3,6 +3,7 @@ package uz.uzumtech.retail_service.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import uz.uzumtech.retail_service.dto.projection.IngredientRequirement;
 import uz.uzumtech.retail_service.entity.Cart;
 import uz.uzumtech.retail_service.entity.OrderItem;
 

@@ -1,4 +1,4 @@
-package uz.uzumtech.retail_service.repository;
+package uz.uzumtech.retail_service.dto.projection;
 
 import java.math.BigDecimal;
 

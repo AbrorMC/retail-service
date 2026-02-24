@@ -8,7 +8,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import uz.uzumtech.retail_service.constant.InventoryTransactionType;
 import uz.uzumtech.retail_service.entity.Inventory;
 import uz.uzumtech.retail_service.exception.OrderNotFoundException;
-import uz.uzumtech.retail_service.repository.IngredientRequirement;
+import uz.uzumtech.retail_service.dto.projection.IngredientRequirement;
 import uz.uzumtech.retail_service.repository.InventoryRepository;
 import uz.uzumtech.retail_service.repository.OrderItemRepository;
 import uz.uzumtech.retail_service.repository.OrderRepository;
