@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.uzumtech.retail_service.constant.enums.FinancialState;
 import uz.uzumtech.retail_service.dto.projection.InventoryStock;
+import uz.uzumtech.retail_service.dto.projection.MaterialsReport;
 import uz.uzumtech.retail_service.dto.request.PeriodFilterRequest;
 import uz.uzumtech.retail_service.dto.response.FinancialResponse;
 import uz.uzumtech.retail_service.entity.Finance;
@@ -72,5 +73,13 @@ public class ReportServiceImpl implements ReportService {
 
         return inventoryRepository
                 .getInventoriesToDate(dateTime);
+    }
+
+    @Override
+    public List<MaterialsReport> getMaterialsReport(PeriodFilterRequest request) {
+        LocalDateTime start = request.startDate().atStartOfDay();
+        LocalDateTime end = request.endDate().atTime(LocalTime.MAX);
+
+        return inventoryRepository.getMaterialsReport(start, end);
     }
 }
