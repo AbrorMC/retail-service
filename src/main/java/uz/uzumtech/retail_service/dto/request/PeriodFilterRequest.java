@@ -5,7 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-public record ReportFilterRequest(
+public record PeriodFilterRequest(
         @NotNull
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
         LocalDate startDate,

@@ -6,8 +6,10 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import uz.uzumtech.retail_service.dto.projection.InventoryStock;
 import uz.uzumtech.retail_service.entity.Inventory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +30,25 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
             )
         """)
     List<Inventory> lockAndGetInventories(@Param("orderId") Long orderId);
+
+    @Query(value = """
+                SELECT
+                    name as ingredient_name,
+                	unit,
+                    actual_stock AS actualStock,
+                    total_cost AS totalCost
+                FROM (
+                    SELECT
+                        ing.name,
+                		ing.unit,
+                        inv.actual_stock,
+                        inv.total_cost,
+                        ROW_NUMBER() OVER (PARTITION BY inv.ingredient_id ORDER BY inv.id DESC) as rn
+                    FROM inventories inv
+                    LEFT JOIN ingredients ing ON ing.id = inv.ingredient_id
+                    WHERE inv.created_at <= :date
+                ) ranked_inv
+                WHERE rn = 1;
+            """, nativeQuery = true)
+    List<InventoryStock> getInventoriesToDate(LocalDateTime date);
 }

@@ -4,14 +4,20 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uz.uzumtech.retail_service.dto.request.ReportFilterRequest;
+import uz.uzumtech.retail_service.dto.projection.InventoryStock;
+import uz.uzumtech.retail_service.dto.request.PeriodFilterRequest;
 import uz.uzumtech.retail_service.dto.response.FinancialResponse;
 import uz.uzumtech.retail_service.service.ReportService;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/core/reports")
@@ -23,9 +29,13 @@ public class ReportController {
     ReportService reportService;
 
     @GetMapping("/financial")
-    public ResponseEntity<FinancialResponse> getFinancialReport(@Valid ReportFilterRequest request) {
+    public ResponseEntity<FinancialResponse> getFinancialReport(@Valid PeriodFilterRequest request) {
         return ResponseEntity.ok(reportService.getFinancialReport(request));
     }
 
-
+    @GetMapping("/stock")
+    public ResponseEntity<List<InventoryStock>> getStockReport(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return ResponseEntity.ok(reportService.getStockReport(date));
+    }
 }
