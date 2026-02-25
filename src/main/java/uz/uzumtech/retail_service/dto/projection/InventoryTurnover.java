@@ -5,15 +5,10 @@ import uz.uzumtech.retail_service.constant.enums.MeasurementUnit;
 
 import java.math.BigDecimal;
 
-@JsonPropertyOrder({ "ingredientName", "unit", "stockBegin", "costBegin",
-        "incomeQuantity", "outcomeQuantity", "stockEnd", "costEnd"})
-public interface MaterialsReport {
+@JsonPropertyOrder({ "ingredientName", "unit", "incomeQuantity", "outcomeQuantity" })
+public interface InventoryTurnover {
     String getIngredientName();
     MeasurementUnit getUnit();
-    BigDecimal getStockBegin();
-    BigDecimal getCostBegin();
     BigDecimal getIncomeQuantity();
     BigDecimal getOutcomeQuantity();
-    BigDecimal getStockEnd();
-    BigDecimal getCostEnd();
 }

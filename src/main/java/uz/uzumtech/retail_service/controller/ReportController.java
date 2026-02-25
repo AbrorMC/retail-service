@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uz.uzumtech.retail_service.dto.projection.InventoryStock;
-import uz.uzumtech.retail_service.dto.projection.MaterialsReport;
+import uz.uzumtech.retail_service.dto.MaterialsReportDto;
 import uz.uzumtech.retail_service.dto.request.PeriodFilterRequest;
 import uz.uzumtech.retail_service.dto.response.FinancialResponse;
 import uz.uzumtech.retail_service.service.ReportService;
@@ -41,7 +41,7 @@ public class ReportController {
     }
 
     @GetMapping("/materials")
-    public ResponseEntity<List<MaterialsReport>> getMaterialsReport(@Valid PeriodFilterRequest request) {
+    public ResponseEntity<List<MaterialsReportDto>> getMaterialsReport(@Valid PeriodFilterRequest request) {
         return ResponseEntity.ok(reportService.getMaterialsReport(request));
     }
 }

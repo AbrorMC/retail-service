@@ -1,7 +1,7 @@
 package uz.uzumtech.retail_service.service;
 
 import uz.uzumtech.retail_service.dto.projection.InventoryStock;
-import uz.uzumtech.retail_service.dto.projection.MaterialsReport;
+import uz.uzumtech.retail_service.dto.MaterialsReportDto;
 import uz.uzumtech.retail_service.dto.request.PeriodFilterRequest;
 import uz.uzumtech.retail_service.dto.response.FinancialResponse;
 
@@ -16,5 +16,5 @@ public interface ReportService {
 
     FinancialResponse getFinancialReport(PeriodFilterRequest request);
     List<InventoryStock> getStockReport(LocalDate date);
-    List<MaterialsReport> getMaterialsReport(PeriodFilterRequest request);
+    List<MaterialsReportDto> getMaterialsReport(PeriodFilterRequest request);
 }
