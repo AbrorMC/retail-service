@@ -1,6 +1,5 @@
 package uz.uzumtech.retail_service.component.adapter;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -10,11 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import uz.uzumtech.retail_service.constant.Constants;
-import uz.uzumtech.retail_service.constant.enums.PaymentStatus;
 import uz.uzumtech.retail_service.dto.request.PaymentRequest;
 import uz.uzumtech.retail_service.dto.response.PaymentResponse;
-
-import java.time.OffsetDateTime;
 
 @Slf4j
 @Component
@@ -24,9 +20,7 @@ public class TransactionServiceAdapter {
 
     RestClient restClient;
 
-
-    @CircuitBreaker(name = "transactionService", fallbackMethod = "fallbackSendTransaction")
-     public PaymentResponse sendTransaction(PaymentRequest request) {
+    public PaymentResponse sendTransaction(PaymentRequest request) {
 
          var result = restClient
                  .post()
@@ -45,7 +39,6 @@ public class TransactionServiceAdapter {
          return result;
     }
 
-    @CircuitBreaker(name = "transactionService", fallbackMethod = "fallbackRefundTransaction")
     public PaymentResponse refund(PaymentRequest request) {
 
         var result = restClient
@@ -63,30 +56,5 @@ public class TransactionServiceAdapter {
         log.info("{}", result);
 
         return result;
-    }
-
-    private PaymentResponse fallbackSendTransaction(PaymentRequest request, Throwable t) {
-        log.error("Fallback SendTransaction: {}", t.getMessage());
-        return new PaymentResponse(
-                null,
-                request.referenceId(),
-                PaymentStatus.FAILED,
-                request.amount(),
-                request.currency(),
-                OffsetDateTime.now()
-        );
-    }
-
-    // Fallback для возврата
-    private PaymentResponse fallbackRefund(PaymentRequest request, Throwable t) {
-        log.error("Fallback Refund: {}", t.getMessage());
-        return new PaymentResponse(
-                null,
-                request.referenceId(),
-                PaymentStatus.REJECTED,
-                request.amount(),
-                request.currency(),
-                OffsetDateTime.now()
-        );
     }
 }

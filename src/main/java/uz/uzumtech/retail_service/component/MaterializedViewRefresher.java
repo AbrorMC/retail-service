@@ -15,7 +15,7 @@ public class MaterializedViewRefresher {
     @PersistenceContext
     EntityManager entityManager;
 
-    @Scheduled(fixedRate = 10000L)
+    @Scheduled(fixedRateString = "${app.scheduling.inventory-report-rate}")
     @Transactional
     public void refreshInventoryBalancesMaterializedView() {
         entityManager.createNativeQuery("REFRESH MATERIALIZED VIEW CONCURRENTLY mv_inventory_balances").executeUpdate();

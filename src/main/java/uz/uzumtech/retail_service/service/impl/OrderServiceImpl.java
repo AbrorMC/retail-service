@@ -16,6 +16,7 @@ import uz.uzumtech.retail_service.mapper.OrderMapper;
 import uz.uzumtech.retail_service.repository.CartRepository;
 import uz.uzumtech.retail_service.repository.OrderRepository;
 import uz.uzumtech.retail_service.service.OrderService;
+import uz.uzumtech.retail_service.service.OrderServiceHelper;
 import uz.uzumtech.retail_service.utils.PaginationValidator;
 
 import java.math.BigDecimal;
@@ -29,9 +30,9 @@ public class OrderServiceImpl implements OrderService {
     OrderMapper orderMapper;
     OrderRepository orderRepository;
     CartRepository cartRepository;
+    OrderServiceHelper orderServiceHelper;
 
     @Override
-    @Transactional
     public OrderResponse createOrder(OrderRequest request) {
         var order = orderMapper.toEntity(request);
         var cart = cartRepository
@@ -49,10 +50,11 @@ public class OrderServiceImpl implements OrderService {
         cart.setItemCount(0);
         cart.setTotalAmount(BigDecimal.ZERO);
 
-        return orderMapper.toResponse(orderRepository.save(order));
+        return orderMapper.toResponse(orderServiceHelper.save(order));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PageResponse<OrderResponse> getAllOrders(int page, int size, Long userId) {
         var pageable = PaginationValidator.validate(page, size);
 
@@ -62,7 +64,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
     public void updateStatus(Long orderId, OrderStatus status) {
         var order = orderRepository
                 .findById(orderId)
@@ -73,5 +74,7 @@ public class OrderServiceImpl implements OrderService {
         if (status == OrderStatus.COMPLETED) {
             order.setActive(false);
         }
+
+        orderServiceHelper.save(order);
     }
 }

@@ -19,6 +19,7 @@ import uz.uzumtech.retail_service.repository.FoodRepository;
 import uz.uzumtech.retail_service.repository.OrderItemRepository;
 import uz.uzumtech.retail_service.repository.PriceRepository;
 import uz.uzumtech.retail_service.service.CartService;
+import uz.uzumtech.retail_service.service.CartServiceHelper;
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +32,9 @@ public class CartServiceImpl implements CartService {
     OrderItemRepository orderItemRepository;
     FoodRepository foodRepository;
     PriceRepository priceRepository;
+    CartServiceHelper cartServiceHelper;
 
     @Override
-    @Transactional
     public OrderItemResponse addItem(OrderItemRequest request) {
         int available = foodRepository.getAvailableServings(request.foodId());
 
@@ -58,7 +59,9 @@ public class CartServiceImpl implements CartService {
         cartItem.setPrice(price.getPrice());
         cart.addItem(cartItem);
 
-        return orderItemMapper.toResponse(orderItemRepository.save(cartItem));
+        cartServiceHelper.saveCart(cart);
+
+        return orderItemMapper.toResponse(cartServiceHelper.saveItem(cartItem));
     }
 
     @Override
@@ -72,7 +75,6 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @Transactional
     public void deleteItem(Long cartId, Long itemId) {
         var cart = cartRepository
                 .findById(cartId)
@@ -83,16 +85,19 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new OrderItemNotFoundException(itemId.toString()));
 
         cart.removeItem(item);
+
+        cartServiceHelper.saveCart(cart);
     }
 
     @Override
-    @Transactional
     public void clear(Long cartId) {
         var cart = cartRepository
                 .findById(cartId)
                 .orElseThrow(() -> new CartNotFoundException(cartId.toString()));
 
         cart.removeAllItems();
+
+        cartServiceHelper.saveCart(cart);
     }
 
 

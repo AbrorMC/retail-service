@@ -2,9 +2,8 @@ spring:
   application:
     name: retail-service
 
-  spring:
-    jackson:
-      property-naming-strategy: SNAKE_CASE
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 
   data.web.pageable:
     default-page-size: 10
@@ -43,6 +42,10 @@ spring:
     baseline-on-migrate: true
     repair-on-migrate: true
 
+app:
+  scheduling:
+    inventory-report-rate: ${INVENTORY_REPORT_RATE:10000}
+
 # Tomcat configuration (milliseconds)
 server:
   port: ${SERVER_PORT:8081}
@@ -80,21 +83,3 @@ kafka:
     payment-commands-topic: ${KAFKA_PAYMENT_COMMANDS_TOPIC:payment_commands}
     inventory-commands-topic: ${KAFKA_INVENTORY_COMMANDS_TOPIC:inventory_commands}
     inventory-events-topic: ${KAFKA_INVENTORY_EVENTS_TOPIC:inventory_events}
-
-resilience4j:
-  circuitbreaker:
-    instances:
-      transactionService:
-        failure-rate-threshold: 50
-        wait-duration-in-open-state: 10s
-        permitted-number-of-calls-in-half-open-state: 2
-        sliding-window-size: 10
-  retry:
-    instances:
-      currencyService:
-        max-attempts: 3
-        wait-duration: 2s
-  timelimiter:
-    instances:
-      currencyService:
-        timeout-duration: 3s
