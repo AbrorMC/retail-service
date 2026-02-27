@@ -9,7 +9,6 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import uz.uzumtech.retail_service.configuration.props.KafkaProps;
-import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 import uz.uzumtech.retail_service.dto.kafka.InventoryEventDto;
 
 @Slf4j

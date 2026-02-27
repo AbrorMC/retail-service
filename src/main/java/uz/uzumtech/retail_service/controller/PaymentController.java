@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uz.uzumtech.retail_service.dto.PaymentWebhookDto;
 import uz.uzumtech.retail_service.dto.request.PaymentRequest;
 import uz.uzumtech.retail_service.dto.response.PaymentResponse;
 import uz.uzumtech.retail_service.service.PaymentService;
 
 @Slf4j
 @RestController
-@RequestMapping("api/core/payments")
+@RequestMapping("api/v1/retail/payments")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PaymentController {

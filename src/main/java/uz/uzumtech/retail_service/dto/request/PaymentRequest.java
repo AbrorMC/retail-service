@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import uz.uzumtech.retail_service.constant.enums.Currency;
+import uz.uzumtech.retail_service.constant.enums.TransactionType;
 
 import java.math.BigDecimal;
 
@@ -12,9 +13,10 @@ public record PaymentRequest(
         Long referenceId,
 
         @NotNull(message = "transaction type required")
-        String type,
+        TransactionType type,
 
-        @NotNull(message = "amount is required") @Positive(message = "amount should be positive")
+        @NotNull(message = "amount is required")
+        @Positive(message = "amount should be positive")
         BigDecimal amount,
 
         @NotNull(message = "currency required")

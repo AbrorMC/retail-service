@@ -10,7 +10,7 @@ import uz.uzumtech.retail_service.dto.response.PageResponse;
 import uz.uzumtech.retail_service.service.CategoryService;
 
 @RestController
-@RequestMapping("api/core/categories")
+@RequestMapping("api/v1/retail/categories")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CategoryController {

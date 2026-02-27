@@ -1,9 +1,10 @@
 package uz.uzumtech.retail_service.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record OrderRequest(
-
-        @JsonProperty("cart_id")
+        @NotNull
+        @Positive
         Long cartId
 ) {}

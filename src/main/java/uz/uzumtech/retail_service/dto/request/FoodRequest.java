@@ -18,6 +18,7 @@ public record FoodRequest(
         BigDecimal price,
 
         @NotNull
+        @Positive
         Long categoryId,
 
         @NotNull

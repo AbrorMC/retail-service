@@ -10,15 +10,9 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import uz.uzumtech.retail_service.component.adapter.TransactionServiceAdapter;
-import uz.uzumtech.retail_service.component.kafka.producer.InventoryEventProducer;
-import uz.uzumtech.retail_service.component.kafka.producer.PaymentEventProducer;
-import uz.uzumtech.retail_service.constant.enums.EventStatus;
-import uz.uzumtech.retail_service.constant.enums.PaymentStatus;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
-import uz.uzumtech.retail_service.dto.request.PaymentRequest;
 import uz.uzumtech.retail_service.mapper.PaymentMapper;
 import uz.uzumtech.retail_service.repository.PaymentRepository;
-import uz.uzumtech.retail_service.service.InventoryService;
 
 @Slf4j
 @Component
@@ -39,7 +33,7 @@ public class PaymentCommandConsumer {
                 .findByReferenceId(id)
                 .orElseThrow(() -> new RuntimeException("Payment not found for reference id: " + id));
 
-        var paymentResponse = transactionServiceAdapter.refund(paymentMapper.toRequest(paymentEntity));
+        transactionServiceAdapter.refund(paymentMapper.toRequest(paymentEntity));
 
         log.info("inventoryCommandListener consumer {}", payload);
     }

@@ -11,7 +11,7 @@ import uz.uzumtech.retail_service.dto.response.PageResponse;
 import uz.uzumtech.retail_service.service.FoodService;
 
 @RestController
-@RequestMapping("api/core/foods")
+@RequestMapping("api/v1/retail/foods")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class FoodController {

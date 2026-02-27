@@ -5,7 +5,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import uz.uzumtech.retail_service.constant.InventoryTransactionType;
+import uz.uzumtech.retail_service.constant.enums.InventoryTransactionType;
 import uz.uzumtech.retail_service.entity.Inventory;
 import uz.uzumtech.retail_service.exception.OrderNotFoundException;
 import uz.uzumtech.retail_service.dto.projection.IngredientRequirement;

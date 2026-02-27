@@ -11,7 +11,7 @@ import uz.uzumtech.retail_service.dto.response.CartResponse;
 import uz.uzumtech.retail_service.service.CartService;
 
 @RestController
-@RequestMapping("api/core/cart")
+@RequestMapping("api/v1/retail/cart")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CartController {

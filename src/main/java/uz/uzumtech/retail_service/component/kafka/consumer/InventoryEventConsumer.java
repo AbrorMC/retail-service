@@ -26,23 +26,24 @@ public class InventoryEventConsumer {
     OrderService orderService;
     PaymentCommandProducer paymentCommandProducer;
     ReportService reportService;
-    MaterializedViewRefresher materializedViewRefresher;
 
     @KafkaListener(topics = "${kafka.topic.inventory-events-topic}", containerFactory = "inventoryEventFactory")
     public void inventoryEventListener(@Payload InventoryEventDto payload, Acknowledgment acknowledgment) {
         acknowledgment.acknowledge();
 
+        Long orderId = Long.parseLong(payload.key());
+
         if (payload.message().status().equals(EventStatus.INVENTORY_RESERVED)) {
             log.info("Inventory reserved successfully for order id: {}", payload.key());
 
-            orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.COMPLETED);
+            orderService.updateStatus(orderId, OrderStatus.COMPLETED);
 
             reportService.registerIncome(payload.message().income());
             reportService.registerExpense(payload.message().expense());
         } else {
             log.error("Inventory reservation failed for order id: {}", payload.key());
 
-            orderService.updateStatus(Long.parseLong(payload.key()), OrderStatus.CANCELLED);
+            orderService.updateStatus(orderId, OrderStatus.CANCELLED);
 
             paymentCommandProducer.sendMessage(
                     new KafkaMessageDto(

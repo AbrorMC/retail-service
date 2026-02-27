@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive;
 public record OrderItemRequest(
 
         @NotNull
-        @Positive
+        @Positive(message = "positive")
         Long cartId,
 
         @NotNull

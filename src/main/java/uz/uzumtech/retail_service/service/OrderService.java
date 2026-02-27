@@ -8,9 +8,7 @@ import uz.uzumtech.retail_service.dto.response.PageResponse;
 public interface OrderService {
 
     OrderResponse createOrder(OrderRequest request);
-
     PageResponse<OrderResponse> getAllOrders(int page, int size, Long userId);
-
     void updateStatus(Long orderId, OrderStatus status);
 
 }

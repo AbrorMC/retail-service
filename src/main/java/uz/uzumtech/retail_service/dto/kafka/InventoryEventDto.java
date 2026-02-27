@@ -1,7 +1,6 @@
 package uz.uzumtech.retail_service.dto.kafka;
 
 import uz.uzumtech.retail_service.constant.enums.EventStatus;
-import uz.uzumtech.retail_service.dto.response.OrderResponse;
 
 import java.math.BigDecimal;
 

@@ -15,7 +15,6 @@ import uz.uzumtech.retail_service.constant.enums.OrderStatus;
 import uz.uzumtech.retail_service.constant.enums.PaymentStatus;
 import uz.uzumtech.retail_service.dto.KafkaMessageDto;
 import uz.uzumtech.retail_service.dto.kafka.PaymentEventDto;
-import uz.uzumtech.retail_service.repository.OrderRepository;
 import uz.uzumtech.retail_service.service.OrderService;
 import uz.uzumtech.retail_service.service.PaymentService;
 
@@ -33,24 +32,23 @@ public class PaymentEventConsumer {
     public void paymentEventListener(@Payload PaymentEventDto payload, Acknowledgment acknowledgment) {
         acknowledgment.acknowledge();
 
-        if (payload.message().status() == PaymentStatus.REFUND) {
-            paymentService.updatePaymentStatus(Long.parseLong(payload.message().referenceId().toString()), PaymentStatus.REFUND);
-        }
+        Long orderId = Long.parseLong(payload.key());
 
-        var orderStatus = payload.message().status() == PaymentStatus.COMPLETED ?
-                OrderStatus.PAID : OrderStatus.CANCELLED;
+        switch (payload.message().status()) {
+            case REFUND -> paymentService.updatePaymentStatus(Long.parseLong(payload.message().referenceId().toString()), PaymentStatus.REFUND);
+            case COMPLETED -> {
+                orderService.updateStatus(orderId, OrderStatus.PAID);
+                inventoryCommandProducer.sendMessage(
+                        new KafkaMessageDto(
+                                payload.key(),
+                                payload.correlationId(),
+                                EventStatus.RESERVE_INVENTORY.toString()
+                        )
+                );
+            }
+            default -> orderService.updateStatus(orderId, OrderStatus.CANCELLED);
+            }
 
-        orderService.updateStatus(Long.parseLong(payload.key()), orderStatus);
-
-        if (orderStatus == OrderStatus.PAID) {
-            inventoryCommandProducer.sendMessage(
-                    new KafkaMessageDto(
-                            payload.key(),
-                            payload.correlationId(),
-                            EventStatus.RESERVE_INVENTORY.toString()
-                    )
-            );
-        }
         log.info("paymentEventListener consumer {}", payload);
     }
 }
