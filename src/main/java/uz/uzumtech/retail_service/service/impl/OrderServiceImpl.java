@@ -16,7 +16,7 @@ import uz.uzumtech.retail_service.mapper.OrderMapper;
 import uz.uzumtech.retail_service.repository.CartRepository;
 import uz.uzumtech.retail_service.repository.OrderRepository;
 import uz.uzumtech.retail_service.service.OrderService;
-import uz.uzumtech.retail_service.service.OrderServiceHelper;
+import uz.uzumtech.retail_service.service.OrderTransactionService;
 import uz.uzumtech.retail_service.utils.PaginationValidator;
 
 import java.math.BigDecimal;
@@ -30,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     OrderMapper orderMapper;
     OrderRepository orderRepository;
     CartRepository cartRepository;
-    OrderServiceHelper orderServiceHelper;
+    OrderTransactionService orderTransactionService;
 
     @Override
     public OrderResponse createOrder(OrderRequest request) {
@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
         cart.setItemCount(0);
         cart.setTotalAmount(BigDecimal.ZERO);
 
-        return orderMapper.toResponse(orderServiceHelper.save(order));
+        return orderMapper.toResponse(orderTransactionService.save(order));
     }
 
     @Override
@@ -75,6 +75,6 @@ public class OrderServiceImpl implements OrderService {
             order.setActive(false);
         }
 
-        orderServiceHelper.save(order);
+        orderTransactionService.save(order);
     }
 }

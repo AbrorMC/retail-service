@@ -9,12 +9,12 @@ import uz.uzumtech.retail_service.entity.Cart;
 import uz.uzumtech.retail_service.entity.OrderItem;
 import uz.uzumtech.retail_service.repository.CartRepository;
 import uz.uzumtech.retail_service.repository.OrderItemRepository;
-import uz.uzumtech.retail_service.service.CartServiceHelper;
+import uz.uzumtech.retail_service.service.CartTransactionService;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CartServiceHelperImpl implements CartServiceHelper {
+public class CartTransactionServiceImpl implements CartTransactionService {
 
     OrderItemRepository orderItemRepository;
     CartRepository cartRepository;

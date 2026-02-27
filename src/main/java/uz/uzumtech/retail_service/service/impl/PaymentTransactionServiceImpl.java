@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.uzumtech.retail_service.entity.Payment;
 import uz.uzumtech.retail_service.repository.PaymentRepository;
-import uz.uzumtech.retail_service.service.PaymentServiceHelper;
+import uz.uzumtech.retail_service.service.PaymentTransactionService;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PaymentServiceHelperImpl implements PaymentServiceHelper {
+public class PaymentTransactionServiceImpl implements PaymentTransactionService {
 
     PaymentRepository paymentRepository;
 

@@ -14,7 +14,7 @@ import uz.uzumtech.retail_service.mapper.PaymentMapper;
 import uz.uzumtech.retail_service.repository.OrderRepository;
 import uz.uzumtech.retail_service.repository.PaymentRepository;
 import uz.uzumtech.retail_service.service.PaymentService;
-import uz.uzumtech.retail_service.service.PaymentServiceHelper;
+import uz.uzumtech.retail_service.service.PaymentTransactionService;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class PaymentServiceImpl implements PaymentService {
     PaymentMapper paymentMapper;
     PaymentRepository paymentRepository;
     OrderRepository orderRepository;
-    PaymentServiceHelper paymentServiceHelper;
+    PaymentTransactionService paymentTransactionService;
 
     @Override
     public PaymentResponse createPayment(PaymentRequest paymentRequest) {
@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
             throw new IllegalArgumentException("Cannot create payment for an inactive order with id: " + paymentRequest.referenceId());
         }
 
-        paymentServiceHelper.save(paymentMapper.toEntity(paymentRequest));
+        paymentTransactionService.save(paymentMapper.toEntity(paymentRequest));
 
         return transactionServiceAdapter.sendTransaction(paymentRequest);
 
@@ -52,6 +52,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         payment.setStatus(status);
 
-        paymentServiceHelper.save(payment);
+        paymentTransactionService.save(payment);
     }
 }

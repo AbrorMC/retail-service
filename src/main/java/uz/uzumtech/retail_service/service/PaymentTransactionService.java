@@ -2,6 +2,6 @@ package uz.uzumtech.retail_service.service;
 
 import uz.uzumtech.retail_service.entity.Payment;
 
-public interface PaymentServiceHelper {
+public interface PaymentTransactionService {
     Payment save(Payment payment);
 }

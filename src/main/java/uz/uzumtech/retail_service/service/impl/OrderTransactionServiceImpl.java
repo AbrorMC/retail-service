@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.uzumtech.retail_service.entity.Order;
 import uz.uzumtech.retail_service.repository.OrderRepository;
-import uz.uzumtech.retail_service.service.OrderServiceHelper;
+import uz.uzumtech.retail_service.service.OrderTransactionService;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class OrderServiceHelperImpl implements OrderServiceHelper {
+public class OrderTransactionServiceImpl implements OrderTransactionService {
 
     OrderRepository orderRepository;
 

@@ -19,7 +19,7 @@ import uz.uzumtech.retail_service.repository.FoodRepository;
 import uz.uzumtech.retail_service.repository.OrderItemRepository;
 import uz.uzumtech.retail_service.repository.PriceRepository;
 import uz.uzumtech.retail_service.service.CartService;
-import uz.uzumtech.retail_service.service.CartServiceHelper;
+import uz.uzumtech.retail_service.service.CartTransactionService;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class CartServiceImpl implements CartService {
     OrderItemRepository orderItemRepository;
     FoodRepository foodRepository;
     PriceRepository priceRepository;
-    CartServiceHelper cartServiceHelper;
+    CartTransactionService cartTransactionService;
 
     @Override
     public OrderItemResponse addItem(OrderItemRequest request) {
@@ -59,9 +59,9 @@ public class CartServiceImpl implements CartService {
         cartItem.setPrice(price.getPrice());
         cart.addItem(cartItem);
 
-        cartServiceHelper.saveCart(cart);
+        cartTransactionService.saveCart(cart);
 
-        return orderItemMapper.toResponse(cartServiceHelper.saveItem(cartItem));
+        return orderItemMapper.toResponse(cartTransactionService.saveItem(cartItem));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class CartServiceImpl implements CartService {
 
         cart.removeItem(item);
 
-        cartServiceHelper.saveCart(cart);
+        cartTransactionService.saveCart(cart);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class CartServiceImpl implements CartService {
 
         cart.removeAllItems();
 
-        cartServiceHelper.saveCart(cart);
+        cartTransactionService.saveCart(cart);
     }
 
 

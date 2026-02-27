@@ -2,7 +2,7 @@ package uz.uzumtech.retail_service.service;
 
 import uz.uzumtech.retail_service.entity.Order;
 
-public interface OrderServiceHelper {
+public interface OrderTransactionService {
 
     Order save(Order order);
 
