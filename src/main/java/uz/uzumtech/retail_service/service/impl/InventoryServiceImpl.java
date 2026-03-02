@@ -60,7 +60,8 @@ public class InventoryServiceImpl implements InventoryService {
                 return BigDecimal.ZERO;
             }
 
-            BigDecimal inventoryTotalCost = inventory.getTotalCost()
+            BigDecimal totalCost = inventory.getTotalCost();
+            BigDecimal currentCost = totalCost
                     .divide(inventory.getQuantity(), RoundingMode.CEILING)
                     .multiply(neededQuantity);
 
@@ -69,7 +70,7 @@ public class InventoryServiceImpl implements InventoryService {
                     .type(InventoryTransactionType.WRITE_OFF)
                     .quantity(neededQuantity)
                     .actualStock(inventory.getActualStock().subtract(neededQuantity))
-                    .totalCost(inventoryTotalCost)
+                    .totalCost(totalCost.subtract(currentCost))
                     .createdAt(LocalDateTime.now())
                     .build();
 
@@ -79,7 +80,10 @@ public class InventoryServiceImpl implements InventoryService {
         inventoryRepository.saveAll(newRecords);
 
         return newRecords.stream()
-                .map(Inventory::getTotalCost)
+                .map(i ->
+                    i.getTotalCost().divide(i.getActualStock(), RoundingMode.CEILING)
+                            .multiply(i.getQuantity())
+                )
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
