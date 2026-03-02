@@ -1,0 +1,22 @@
+spring:
+  flyway:
+    enabled: false
+  datasource:
+    # Используем DATABASE_TO_LOWER=TRUE и убираем жесткую привязку к схеме в INIT
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS "postgres"
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      # create-drop важен, чтобы Hibernate сам пересоздавал таблицы
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        # Пытаемся заставить Hibernate игнорировать схему или использовать дефолтную
+        default_schema: postgres
+        globally_quoted_identifiers: true
+        # Настройка для работы с PostgreSQL синтаксисом в H2
+        dialect: org.hibernate.dialect.H2Dialect
+        # Эта опция заставит Hibernate игнорировать ошибки при попытке удаления несуществующих таблиц
+        new_generator_mappings: true
