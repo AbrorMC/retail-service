@@ -87,6 +87,26 @@ services:
       kafka:
         condition: service_healthy
 
+  retail-service:
+    build: .
+    container_name: retail_service_app
+    ports:
+      - "8081:8081" # Пробрасываем порт приложения наружу
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/retail
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123
+      # Если нужно переопределить топики из вашего YAML:
+      - KAFKA_PAYMENT_EVENTS_TOPIC=payment_events
+    depends_on:
+      db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+
 volumes:
   pgdata:
   kafka_data:

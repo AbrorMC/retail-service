@@ -3,6 +3,7 @@ package uz.uzumtech.retail_service.service.impl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.uzumtech.retail_service.dto.request.OrderItemRequest;
@@ -22,6 +23,7 @@ import uz.uzumtech.retail_service.service.CartService;
 import uz.uzumtech.retail_service.service.CartTransactionService;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CartServiceImpl implements CartService {
@@ -47,7 +49,7 @@ public class CartServiceImpl implements CartService {
                 .orElseThrow(() -> new FoodNotFoundException(request.foodId().toString()));
 
         var cart = cartRepository
-                .findById(request.cartId())
+                .findByIdWithItems(request.cartId())
                 .orElseThrow(() -> new CartNotFoundException(request.cartId().toString()));
 
         var price = priceRepository

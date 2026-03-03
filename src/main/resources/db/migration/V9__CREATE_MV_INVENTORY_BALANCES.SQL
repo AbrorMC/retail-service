@@ -2,7 +2,7 @@ CREATE MATERIALIZED VIEW mv_inventory_balances AS
 SELECT DISTINCT ON (ingredient_id)
 	ingredient_id,
 	actual_stock
-FROM postgres.inventories
+FROM inventories
 WHERE is_active = TRUE
 ORDER BY ingredient_id, updated_at DESC, id DESC;
 

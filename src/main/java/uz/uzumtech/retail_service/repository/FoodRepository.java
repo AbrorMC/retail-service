@@ -13,7 +13,7 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
 
     @Query(value = """
                 SELECT
-                    MIN(FLOOR(inv.actual_stock / ri.quantity))
+                    COALESCE(MIN(FLOOR(COALESCE(inv.actual_stock, 0) / ri.quantity)), 0)
                 FROM receipt_items ri
                 LEFT JOIN mv_inventory_balances inv ON ri.ingredient_id = inv.ingredient_id
                 WHERE ri.food_id = :foodId AND ri.is_active = TRUE
