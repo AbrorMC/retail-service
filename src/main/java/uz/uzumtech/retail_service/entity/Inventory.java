@@ -33,7 +33,7 @@ public class Inventory extends BaseEntity {
     @Column(precision = 19, scale = 2, nullable = false)
     BigDecimal quantity;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     InventoryTransactionType type;
 

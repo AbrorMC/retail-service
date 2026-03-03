@@ -32,11 +32,11 @@ public class Payment extends BaseEntity {
     @Column(name = "reference_id", nullable = false, unique = true, updatable = false)
     Long referenceId;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     TransactionType type;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     PaymentStatus status;
 

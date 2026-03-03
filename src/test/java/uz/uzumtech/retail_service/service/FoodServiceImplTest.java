@@ -9,10 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import uz.uzumtech.retail_service.constant.enums.FoodAvailability;
-import uz.uzumtech.retail_service.dto.response.CategoryResponse;
 import uz.uzumtech.retail_service.dto.response.FoodDetailsResponse;
 import uz.uzumtech.retail_service.dto.response.FoodResponse;
 import uz.uzumtech.retail_service.dto.response.PageResponse;
@@ -31,7 +29,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -46,7 +45,8 @@ public class FoodServiceImplTest {
     @Mock
     private FoodMapper foodMapper;
 
-    @InjectMocks private FoodServiceImpl foodService;
+    @InjectMocks
+    private FoodServiceImpl foodService;
 
     private final Long foodId = 1L;
 
@@ -170,6 +170,7 @@ public class FoodServiceImplTest {
         assertThrows(PriceNotFoundException.class, () -> foodService.get(foodId));
 
         // Verify
-        verify(foodRepository).getAvailableServings(foodId);
+        verify(foodRepository).findById(1L);
+        verifyNoMoreInteractions(foodRepository);
     }
 }

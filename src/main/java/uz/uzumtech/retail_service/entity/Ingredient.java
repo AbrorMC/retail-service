@@ -27,7 +27,7 @@ public class Ingredient extends BaseEntity {
     @Column(nullable = false, unique = true)
     String name;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     MeasurementUnit unit;
 

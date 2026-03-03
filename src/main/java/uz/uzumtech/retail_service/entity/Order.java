@@ -36,7 +36,7 @@ public class Order extends BaseEntity {
     @Positive
     Integer itemCount;
 
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     OrderStatus status;
 
