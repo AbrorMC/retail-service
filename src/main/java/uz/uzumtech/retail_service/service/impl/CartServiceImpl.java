@@ -61,9 +61,11 @@ public class CartServiceImpl implements CartService {
         cartItem.setPrice(price.getPrice());
         cart.addItem(cartItem);
 
+        cartTransactionService.saveItem(cartItem);
+
         cartTransactionService.saveCart(cart);
 
-        return orderItemMapper.toResponse(cartTransactionService.saveItem(cartItem));
+        return orderItemMapper.toResponse(cartItem);
     }
 
     @Override

@@ -15,11 +15,11 @@ import uz.uzumtech.retail_service.exception.OrderNotFoundException;
 import uz.uzumtech.retail_service.mapper.OrderMapper;
 import uz.uzumtech.retail_service.repository.CartRepository;
 import uz.uzumtech.retail_service.repository.OrderRepository;
+import uz.uzumtech.retail_service.service.CartTransactionService;
 import uz.uzumtech.retail_service.service.OrderService;
 import uz.uzumtech.retail_service.service.OrderTransactionService;
 import uz.uzumtech.retail_service.utils.PaginationValidator;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -31,24 +31,32 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     CartRepository cartRepository;
     OrderTransactionService orderTransactionService;
+    CartTransactionService cartTransactionService;
 
     @Override
     public OrderResponse createOrder(OrderRequest request) {
-        var order = orderMapper.toEntity(request);
         var cart = cartRepository
                 .findByIdWithItems(request.cartId())
                 .orElseThrow(() -> new CartNotFoundException(request.cartId().toString()));
 
-        List<OrderItem> items = cart.getItems();
+        var order = orderMapper.toEntity(request);
 
-        order.addAll(items);
+        List<OrderItem> orderItems = cart.getItems().stream()
+                .<OrderItem>map(cartItem -> OrderItem.builder()
+                        .food(cartItem.getFood())
+                        .count(cartItem.getCount())
+                        .price(cartItem.getPrice())
+                        .build())
+                .toList();
+
+        order.addAll(orderItems);
         order.setStatus(OrderStatus.CREATED);
-        order.setItemCount(cart.getItemCount());
         order.setTotalPrice(cart.getTotalAmount());
+        order.setItemCount(cart.getItemCount());
         order.setUserId(cart.getUserId());
 
-        cart.setItemCount(0);
-        cart.setTotalAmount(BigDecimal.ZERO);
+        cart.removeAllItems();
+        cartTransactionService.saveCart(cart);
 
         return orderMapper.toResponse(orderTransactionService.save(order));
     }

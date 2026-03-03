@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
 @Entity
 @Getter
 @Setter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "order_items")

@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest(FoodController.class)
 public class FoodControllerTest {
 
     @Autowired
@@ -51,7 +51,7 @@ public class FoodControllerTest {
                         .param("size", String.valueOf(size))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].name").value("Pizza"))
+                .andExpect(jsonPath("$.content[0].name").value("Плов"))
                 .andExpect(jsonPath("$.total_elements").value(1));
 
         Mockito.verify(foodService).getByCategoryId(categoryId, page, size);

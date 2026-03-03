@@ -35,7 +35,7 @@ public class Cart extends BaseEntity {
     Integer itemCount;
 
     @Builder.Default
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     List<OrderItem> items = new ArrayList<>();
 
     public void addItem(OrderItem item) {

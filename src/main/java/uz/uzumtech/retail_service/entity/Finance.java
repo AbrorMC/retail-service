@@ -25,8 +25,8 @@ public class Finance extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "financial_state_type")
     FinancialState state;
 
     @Positive

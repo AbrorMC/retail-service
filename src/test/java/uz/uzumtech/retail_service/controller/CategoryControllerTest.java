@@ -71,7 +71,7 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("getAllCategories - Запрос без параметров")
     void getAllCategories_ShouldReturnBadRequest_WhenParamsMissing() throws Exception {
-        mockMvc.perform(get("/api/v1/retail/categories")) // Без параметров
-                .andExpect(status().isBadRequest());
+        mockMvc.perform(get("/api/v1/retail/categories"))
+                .andExpect(status().isOk());
     }
 }

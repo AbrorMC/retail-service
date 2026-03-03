@@ -32,12 +32,12 @@ public class Payment extends BaseEntity {
     @Column(name = "reference_id", nullable = false, unique = true, updatable = false)
     Long referenceId;
 
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "transaction_type")
     TransactionType type;
 
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "payment_status_type")
     PaymentStatus status;
 
     @NotNull(message = "amount is required")

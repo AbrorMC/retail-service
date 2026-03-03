@@ -12,6 +12,7 @@ import uz.uzumtech.retail_service.constant.enums.OrderStatus;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @SuperBuilder
@@ -36,9 +37,13 @@ public class Order extends BaseEntity {
     @Positive
     Integer itemCount;
 
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "order_status_type")
     OrderStatus status;
+
+    @Builder.Default
+    @Column(name = "external_id", nullable = false, unique = true)
+    UUID externalId = UUID.randomUUID();
 
     @Builder.Default
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)

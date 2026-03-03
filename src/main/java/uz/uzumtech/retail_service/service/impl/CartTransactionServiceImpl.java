@@ -28,6 +28,6 @@ public class CartTransactionServiceImpl implements CartTransactionService {
     @Override
     @Transactional
     public void saveCart(Cart cart) {
-        cartRepository.save(cart);
+        cartRepository.saveAndFlush(cart);
     }
 }

@@ -5,7 +5,9 @@ import jakarta.validation.constraints.Positive;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 import org.hibernate.type.SqlTypes;
 import uz.uzumtech.retail_service.constant.enums.InventoryTransactionType;
 
@@ -33,8 +35,8 @@ public class Inventory extends BaseEntity {
     @Column(precision = 19, scale = 2, nullable = false)
     BigDecimal quantity;
 
-    @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(nullable = false, columnDefinition = "inventory_transaction_type")
     InventoryTransactionType type;
 
     @Positive

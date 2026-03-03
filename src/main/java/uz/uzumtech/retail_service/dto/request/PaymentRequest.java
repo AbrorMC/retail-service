@@ -7,6 +7,7 @@ import uz.uzumtech.retail_service.constant.enums.Currency;
 import uz.uzumtech.retail_service.constant.enums.TransactionType;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public record PaymentRequest(
         @NotNull(message = "referenceId required")
@@ -32,6 +33,9 @@ public record PaymentRequest(
         String receiverName,
 
         @NotBlank(message = "receiverToken required")
-        String receiverToken
+        String receiverToken,
+
+        @NotBlank(message = "receiverToken required")
+        UUID merchantId
 ) {
 }

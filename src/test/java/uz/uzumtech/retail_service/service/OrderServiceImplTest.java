@@ -24,7 +24,7 @@ import uz.uzumtech.retail_service.utils.PaginationValidator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +45,8 @@ class OrderServiceImplTest {
     private CartRepository cartRepository;
     @Mock
     private OrderTransactionService orderTransactionService;
+    @Mock
+    private CartTransactionService cartTransactionService;
 
     @InjectMocks
     private OrderServiceImpl orderService;
@@ -57,7 +59,11 @@ class OrderServiceImplTest {
 
         Cart cart = new Cart();
         cart.setId(cartId);
-        cart.setItems(Collections.singletonList(new OrderItem()));
+
+        List<OrderItem> items = new ArrayList<>();
+        items.add(new OrderItem());
+        cart.setItems(items);
+
         cart.setItemCount(1);
         cart.setTotalAmount(new BigDecimal("100.00"));
         cart.setUserId(10L);
@@ -91,6 +97,7 @@ class OrderServiceImplTest {
         // Verify
         verify(orderTransactionService).save(order);
         verify(cartRepository).findByIdWithItems(cartId);
+        verify(cartTransactionService).saveCart(cart);
     }
 
     @Test
@@ -100,7 +107,6 @@ class OrderServiceImplTest {
         Long cartId = 1L;
         OrderRequest request = new OrderRequest(cartId);
 
-        when(orderMapper.toEntity(request)).thenReturn(new Order());
         when(cartRepository.findByIdWithItems(cartId)).thenReturn(Optional.empty());
 
         // Assert
@@ -171,7 +177,7 @@ class OrderServiceImplTest {
                         true,
                         LocalDateTime.now().toString(),
                         LocalDateTime.now().toString()
-                )), 1,1, 1, true);
+                )), 1, 1, 1, true);
 
         when(orderRepository.findAllByUserId(userId, pageable)).thenReturn(page);
         when(orderMapper.toPageResponse(page)).thenReturn(expectedResponse);
