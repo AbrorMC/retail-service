@@ -35,7 +35,7 @@ public record PaymentRequest(
         @NotBlank(message = "receiverToken required")
         String receiverToken,
 
-        @NotBlank(message = "receiverToken required")
+        @NotBlank(message = "merchantId required")
         UUID merchantId
 ) {
 }

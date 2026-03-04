@@ -8,7 +8,7 @@ CREATE TYPE payment_status_type AS ENUM (
 
 CREATE TABLE IF NOT EXISTS payments (
     id              BIGSERIAL PRIMARY KEY,
-    reference_id    UUID NOT NULL,
+    reference_id    BIGINT NOT NULL,
     type            transaction_type NOT NULL,
     status          payment_status_type,
     amount          NUMERIC(19, 2) NOT NULL CHECK (amount > 0),

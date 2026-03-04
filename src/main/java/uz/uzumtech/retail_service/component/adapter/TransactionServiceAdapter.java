@@ -3,7 +3,9 @@ package uz.uzumtech.retail_service.component.adapter;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -20,30 +22,34 @@ public class TransactionServiceAdapter {
 
     RestClient restClient;
 
+    @Value("${services.transaction-processing.url}")
+    @NonFinal
+    String transactionServiceUrl;
+
     public PaymentResponse sendTransaction(PaymentRequest request) {
 
-         var result = restClient
-                 .post()
-                 .uri(Constants.TRANSACTIONS)
-                 .contentType(MediaType.APPLICATION_JSON)
-                 .body(request)
-                 .retrieve()
-                 .onStatus(HttpStatusCode::isError, (req, res) -> {
-                     log.error("Transaction Service returned: {}", res.getStatusCode());
-                     throw new RuntimeException("External Service Error: " + res.getStatusCode());
-                 })
-                 .body(PaymentResponse.class);
+        var result = restClient
+                .post()
+                .uri(transactionServiceUrl + Constants.TRANSACTIONS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(request)
+                .retrieve()
+                .onStatus(HttpStatusCode::isError, (req, res) -> {
+                    log.error("Transaction Service returned: {}", res.getStatusCode());
+                    throw new RuntimeException("External Service Error: " + res.getStatusCode());
+                })
+                .body(PaymentResponse.class);
 
-         log.info("{}", result);
+        log.info("{}", result);
 
-         return result;
+        return result;
     }
 
     public PaymentResponse refund(PaymentRequest request) {
 
         var result = restClient
                 .post()
-                .uri(Constants.REFUNDS)
+                .uri(transactionServiceUrl + Constants.REFUNDS)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(request)
                 .retrieve()

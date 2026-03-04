@@ -20,3 +20,7 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         # Эта опция заставит Hibernate игнорировать ошибки при попытке удаления несуществующих таблиц
         new_generator_mappings: true
+
+services:
+  transaction-service:
+    url: http://localhost:8080 # Любое значение для теста

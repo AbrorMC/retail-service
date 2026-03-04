@@ -23,6 +23,7 @@ import uz.uzumtech.retail_service.service.impl.PaymentServiceImpl;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -58,7 +59,8 @@ class PaymentServiceImplTest {
                 "a",
                 "b",
                 "c",
-                "d"
+                "d",
+                UUID.randomUUID()
         );
 
         var order = new Order();
@@ -102,7 +104,8 @@ class PaymentServiceImplTest {
                 "a",
                 "b",
                 "c",
-                "d"
+                "d",
+                UUID.randomUUID()
         );
 
         var order = new Order();

@@ -73,6 +73,7 @@ public class InventoryServiceImplTest {
         // Assert
         assertEquals(0, new BigDecimal("250").compareTo(totalCost));
 
+        @SuppressWarnings("unchecked")
         ArgumentCaptor<List<Inventory>> captor = ArgumentCaptor.forClass(List.class);
         verify(inventoryRepository).saveAll(captor.capture());
 

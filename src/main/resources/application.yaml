@@ -64,7 +64,7 @@ server:
 
 services:
   transaction-processing:
-    url: ${TRANSACTION_PROCESSING_URL:http://217.29.121.129/bank_api/api/v1}
+    url: ${TRANSACTION_PROCESSING_URL:http://localhost:8082} #http://217.29.121.129/bank_api/api/v1
 
 # Kafka
 kafka:
