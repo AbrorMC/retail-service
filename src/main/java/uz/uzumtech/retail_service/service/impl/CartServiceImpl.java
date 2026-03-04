@@ -81,7 +81,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteItem(Long cartId, Long itemId) {
         var cart = cartRepository
-                .findById(cartId)
+                .findByIdWithItems(cartId)
                 .orElseThrow(() -> new CartNotFoundException(cartId.toString()));
 
         var item = orderItemRepository
@@ -96,7 +96,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void clear(Long cartId) {
         var cart = cartRepository
-                .findById(cartId)
+                .findByIdWithItems(cartId)
                 .orElseThrow(() -> new CartNotFoundException(cartId.toString()));
 
         cart.removeAllItems();
