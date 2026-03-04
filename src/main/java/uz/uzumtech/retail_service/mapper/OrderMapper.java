@@ -1,6 +1,7 @@
 package uz.uzumtech.retail_service.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import uz.uzumtech.retail_service.dto.request.OrderRequest;
 import uz.uzumtech.retail_service.dto.response.OrderResponse;
@@ -12,6 +13,8 @@ import uz.uzumtech.retail_service.entity.Order;
 )
 public interface OrderMapper extends BaseMapper<OrderResponse, Order> {
 
+    @Mapping(target = "isActive", source = "active")
     OrderResponse toResponse(Order order);
+
     Order toEntity(OrderRequest request);
 }

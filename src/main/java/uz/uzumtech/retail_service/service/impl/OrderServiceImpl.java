@@ -54,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalPrice(cart.getTotalAmount());
         order.setItemCount(cart.getItemCount());
         order.setUserId(cart.getUserId());
+        order.setActive(true);
 
         cart.removeAllItems();
         cartTransactionService.saveCart(cart);

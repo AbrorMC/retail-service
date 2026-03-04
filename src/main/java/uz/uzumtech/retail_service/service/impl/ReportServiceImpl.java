@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,6 +36,8 @@ public class ReportServiceImpl implements ReportService {
 
     FinanceRepository financeRepository;
     InventoryRepository inventoryRepository;
+
+    Executor myExecutor = Executors.newFixedThreadPool(10);
 
     @Override
     @Transactional
@@ -86,11 +90,11 @@ public class ReportServiceImpl implements ReportService {
         LocalDateTime end = request.endDate().atTime(LocalTime.MAX);
 
         var stockAtStartFuture = CompletableFuture.supplyAsync(() ->
-                inventoryRepository.getInventoriesToDate(start));
+                inventoryRepository.getInventoriesToDate(start), myExecutor);
         var turnoverFuture = CompletableFuture.supplyAsync(() ->
-                inventoryRepository.getInventoryTurnover(start, end));
+                inventoryRepository.getInventoryTurnover(start, end), myExecutor);
         var stockAtEndFuture = CompletableFuture.supplyAsync(() ->
-                inventoryRepository.getInventoriesToDate(end));
+                inventoryRepository.getInventoriesToDate(end), myExecutor);
 
         CompletableFuture.allOf(stockAtStartFuture, turnoverFuture, stockAtEndFuture).join();
 
