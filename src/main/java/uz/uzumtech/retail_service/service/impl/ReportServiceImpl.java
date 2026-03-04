@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -103,19 +104,21 @@ public class ReportServiceImpl implements ReportService {
                 .stream()
                 .collect(Collectors.toMap(InventoryStock::getIngredientName, s -> s));
 
-        var allNames = Set.of(stockAtStartMap.keySet(), turnoverMap.keySet(), stockAtEndMap.keySet());
+        var allNames = Stream.of(stockAtStartMap.keySet(), turnoverMap.keySet(), stockAtEndMap.keySet())
+                .flatMap(Set::stream)
+                .collect(Collectors.toSet());
 
         return allNames
                 .stream()
                 .map(name -> new MaterialsReportDto(
-                    name.toString(),
-                    stockAtStartMap.get(name) != null ? stockAtStartMap.get(name).getUnit() : turnoverMap.get(name).getUnit(),
-                    stockAtStartMap.get(name) != null ? stockAtStartMap.get(name).getActualStock() : BigDecimal.ZERO,
-                    stockAtStartMap.get(name) != null ? stockAtStartMap.get(name).getTotalCost() : BigDecimal.ZERO,
-                    turnoverMap.get(name) != null ? turnoverMap.get(name).getIncomeQuantity() : BigDecimal.ZERO,
-                    turnoverMap.get(name) != null ? turnoverMap.get(name).getOutcomeQuantity() : BigDecimal.ZERO,
-                    stockAtEndMap.get(name) != null ? stockAtEndMap.get(name).getActualStock() : BigDecimal.ZERO,
-                    stockAtEndMap.get(name) != null ? stockAtEndMap.get(name).getTotalCost() : BigDecimal.ZERO
+                        name.toString(),
+                        stockAtStartMap.get(name) != null ? stockAtStartMap.get(name).getUnit() : turnoverMap.get(name).getUnit(),
+                        stockAtStartMap.get(name) != null ? stockAtStartMap.get(name).getActualStock() : BigDecimal.ZERO,
+                        stockAtStartMap.get(name) != null ? stockAtStartMap.get(name).getTotalCost() : BigDecimal.ZERO,
+                        turnoverMap.get(name) != null ? turnoverMap.get(name).getIncomeQuantity() : BigDecimal.ZERO,
+                        turnoverMap.get(name) != null ? turnoverMap.get(name).getOutcomeQuantity() : BigDecimal.ZERO,
+                        stockAtEndMap.get(name) != null ? stockAtEndMap.get(name).getActualStock() : BigDecimal.ZERO,
+                        stockAtEndMap.get(name) != null ? stockAtEndMap.get(name).getTotalCost() : BigDecimal.ZERO
 
                 ))
                 .toList();

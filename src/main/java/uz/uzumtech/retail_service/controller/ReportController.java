@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uz.uzumtech.retail_service.dto.projection.InventoryStock;
 import uz.uzumtech.retail_service.dto.MaterialsReportDto;
+import uz.uzumtech.retail_service.dto.projection.InventoryStock;
 import uz.uzumtech.retail_service.dto.request.PeriodFilterRequest;
 import uz.uzumtech.retail_service.dto.response.FinancialResponse;
 import uz.uzumtech.retail_service.service.ReportService;
@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/core/reports")
+@RequestMapping("api/v1/retail/reports")
 @Validated
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
